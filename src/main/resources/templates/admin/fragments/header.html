@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org/"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<!-- Header Begin -->
+<header th:fragment="header" class="mb-5">
+    <div class="header__top">
+        <div class="admin__container">
+            <div class="row">
+                <div class="col-lg-4 admin__header_logo">
+                    <div class="header__top__left">
+                        <div class="header__logo">
+                            <a th:href="@{/admin/index}"><img th:src="@{/img/logo.png}" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8 pt-3">
+                    <div class="header__top__right">
+                        <!-- 로그인 되었을 경우 -->
+                        <th:block sec:authorize="isAuthenticated()">
+                            <div class="header__top__right__social">
+                                <span class="gp_uid">[[${#authentication.principal.member.nick}]]</span>
+                                <a th:href="@{/index}">home</a>
+                                <a th:href="@{/my/index}">마이페이지</a>
+                            </div>
+                            <a th:href="@{/member/logout}">로그아웃</a>
+                        </th:block>
+
+                        <!-- 로그인 상관없이 보여줌 -->
+                        <th:block sec:authorize="isAnonymous()">
+                            <div class="header__top__right__social">
+                                <a th:href="@{/index}">home</a>
+                                <a th:href="@{/my/index}">마이페이지</a>
+                            </div>
+                            <div class="header__top__right__auth">
+                                <a th:href="@{/member/login}">
+                                    <i class="fa fa-user"></i> Login
+                                </a>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</header>
+<!-- Header Section End -->
+</html>

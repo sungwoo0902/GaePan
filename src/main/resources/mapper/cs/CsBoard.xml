@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.kr.gaepan.mapper.cs.CsBoardMapper">
+
+    <!-- select는 resultType 필수 -->
+    <select id="findByGroupAndCate" resultType="co.kr.gaepan.dto.board.BoardDTO"> <!-- LEFT JOIN 해야됨-->
+        SELECT a.*, b.cateName, c.typeName FROM gp_board a
+        LEFT JOIN gp_board_cate b ON a.cate = b.cate
+        LEFT JOIN gp_board_type c ON a.cate = c.cate AND a.type = c.type <!--cate랑 type으로 동시에 JOIN, cate만 하면 안됨 -->
+        WHERE a.parent = 0 AND a.group = #{group} AND a.cate = #{cate}
+        ORDER BY a.bno DESC
+        LIMIT #{offset}, #{limit} <!-- 1페이지에는 인덱스 0부터 10개, 2페이지에는 10부터 10개 이렇게 리스트 출력한다! -->
+    </select>
+
+    <!-- 전체 기능 없지만 쿼리문만 작성해놓음 / 동적쿼리는 뭘 의미???-->
+    <select id="findAllByGroup" resultType="co.kr.gaepan.dto.board.BoardDTO"> <!-- LEFT JOIN 해야됨-->
+        SELECT a.*, b.cateName, c.typeName FROM gp_board a
+        LEFT JOIN gp_board_cate b ON a.cate = b.cate
+        LEFT JOIN gp_board_type c ON a.cate = c.cate AND a.type = c.type <!--cate랑 type으로 동시에 JOIN, cate만 하면 안됨 -->
+        WHERE a.parent = 0 AND a.group = #{group}
+        ORDER BY a.bno DESC
+        LIMIT #{offset}, #{limit} <!-- 1페이지에는 인덱스 0부터 10개, 2페이지에는 10부터 10개 이렇게 리스트 출력한다! -->
+    </select>
+
+    <select id="countByGroupAndCate" resultType="int">
+        SELECT COUNT(*) FROM gp_board a
+        LEFT JOIN gp_board_cate b ON a.cate = b.cate
+        LEFT JOIN gp_board_type c ON a.cate = c.cate AND a.type = c.type
+        WHERE a.parent = 0 AND a.group = #{group} AND a.cate = #{cate}
+    </select>
+
+    <select id="findByNo" resultType="co.kr.gaepan.dto.board.BoardDTO"> <!-- LEFT JOIN 해야됨-->
+        SELECT a.*, b.cateName, c.typeName FROM gp_board a
+        LEFT JOIN gp_board_cate b ON a.cate = b.cate
+        LEFT JOIN gp_board_type c ON a.cate = c.cate AND a.type = c.type
+        WHERE a.bno = #{bno}
+    </select>
+
+    <select id="findByParent" resultType="co.kr.gaepan.dto.board.BoardDTO"> <!-- LEFT JOIN 해야됨-->
+        SELECT a.*, b.cateName, c.typeName FROM gp_board a
+        LEFT JOIN gp_board_cate b ON a.cate = b.cate
+        LEFT JOIN gp_board_type c ON a.cate = c.cate AND a.type = c.type
+        WHERE a.parent = #{bno}
+    </select>
+
+    <insert id="insertInquiry">
+        INSERT INTO `gp_board` SET
+        `uid` = #{uid},
+        `title` = #{title},
+        `content` = #{content},
+        `group` = 'qna',
+        `cate` = #{cate},
+        `type` = #{type},
+        `regIP` = #{regIP},
+        `regDate` = #{regDate};
+    </insert>
+
+    <insert id="insertComment">
+        INSERT INTO `gp_board` SET
+        `uid` = #{uid},
+        `group` = 'qna',
+        `cate` = #{cate},
+        `type` = #{type},
+        `regIP` = #{regIP},
+        `regDate` = #{regDate},
+        `parent` = #{parent},
+        `comment` = #{comment};
+    </insert>
+
+    <delete id="deleteArticle"> <!--$써도 #이랑 같은 기능하네-->
+        DELETE FROM `gp_board` WHERE `bno`=#{bno};
+    </delete>
+
+    <update id="updateComment">
+        UPDATE `gp_board` SET `comment`=#{comment} WHERE `bno`=#{bno};
+    </update>
+
+    <update id="updateArticle">
+        UPDATE `gp_board` SET `title`=#{title}, `content`=#{content} WHERE `bno`=#{bno};
+    </update>
+
+
+
+
+
+</mapper>

@@ -1,0 +1,61 @@
+<aside th:fragment="aside" class="col-lg-3 admin__aside">
+    <div class="admin__categories">
+        <nav class="admin_aside_nav">
+            <div class="admin_aside_div">
+                <i class="fa fa-bars"></i>
+                <span>카테고리</span>
+            </div>
+
+            <ul id="gnb">
+                <li>
+                    <a href="#"><i class="fa fa-cogs" aria-hidden="true"></i>환경설정</a>
+                    <ol>
+                        <li>
+                            <a th:href="@{/admin/config/info}">기본환경정보</a>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-users" aria-hidden="true"></i>회원관리</a>
+                    <ol>
+                        <li>
+                            <a th:href="@{/admin/member/members}">회원</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/admin/member/black(role=3)}">블랙리스트</a>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-paw" aria-hidden="true"></i>반려동물 관리</a>
+                    <ol>
+                        <li>
+                            <a th:href="@{/admin/animal/pet}">반려동물</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/admin/animal/adopt}">입양일기</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/admin/animal/missing}">실종동물</a>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>게시판관리</a>
+                    <ol>
+                        <li>
+                            <a th:href="@{/admin/board/list(group=notice, cate=10)}">Notice</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/admin/board/list(group=faq, cate=20)}">FAQ</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/admin/board/list(group=qna, cate=30)}">QnA</a>
+                        </li>
+                    </ol>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>
+</html>

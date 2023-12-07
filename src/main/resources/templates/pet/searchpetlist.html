@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{pet/fragments/layout}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<th:block layout:fragment="content">
+    <style>
+        .title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+    <!-- Blog Section Begin -->
+    <div class="container">
+        <div class="row">
+            <!-- 좌측 nav - 카테고리 -->
+            <div class="col-lg-2 col-md-2">
+                <div class="blog__sidebar">
+                    <!-- 좌측 sidebar 내용 -->
+                </div>
+            </div>
+
+            <!-- 블로그 List -->
+            <div class="col-lg-8 col-md-8">
+                <div class="hero__search__form" style="display: block; margin-bottom: 30px">
+                    <form th:action="@{/pet/searchpetlist}" method="get" class="nice-select-container">
+                        <select class="nice-select-division" name="division">
+                            <option>글 유형</option>
+                            <option value="1">분양</option>
+                            <option value="2">실종</option>
+                            <option value="3">입양 일기</option>
+                        </select>
+                        <!-- 두 번째 셀렉트 박스 -->
+                        <select class="nice-select-searchType" name="searchType">
+                            <option>동물 유형</option>
+                            <option value="cName">종류</option>
+                            <option value="tName">품종</option>
+                            <option value="name">반려동물이름</option>
+                        </select>
+                        <input type="text" id="searchInput" name="key">
+                        <button style="background-color: mediumpurple; color: white; border: none; width: 100px;" type="submit">검색</button>
+                    </form>
+                </div>
+
+                <br><br/>
+
+                <div class="row">
+                    <!-- 여기서 반복문을 사용하여 검색 결과를 렌더링 -->
+                    <div class="col-lg-6 col-md-6 col-sm-6" th:each="pet : ${petList}">
+                        <div class="blog__item">
+                            <div class="blog__item__pic">
+                                <!-- pet.thumb 변수는 실제 이미지 파일의 이름을 가정합니다. -->
+                                <img style="width: 360px; height: 280px" th:src="@{/upload/} + ${pet.thumb}">
+                            </div>
+                            <div class="blog__item__text">
+                                <ul>
+                                    <li th:text="${#temporals.format(pet.regDate, 'yy-MM-dd')}"><i class="fa fa-calendar-o"></i></li>
+                                    <li><i class="fa fa-comment-o"></i>1</li>
+                                </ul>
+                                <h5>
+                                    <a th:if="${division == 1}" th:href="@{/pet/details(no=${pet.no})}" class="title" th:text="${pet.name}"></a>
+                                    <a th:if="${division == 2}" th:href="@{/pet/missingdetails(no=${pet.no})}" class="title" th:text="${pet.name}"></a>
+                                    <a th:if="${division == 3}" th:href="@{/pet/adoptdetails(no=${pet.no})}" class="title" th:text="${pet.name}"></a>
+                                </h5>
+                                <a th:href="@{/pet/details(no=${pet.no})}" class="blog__btn">
+                                    READ MORE <span class="arrow_right"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 페이징 처리 -->
+                <div class="col-lg-12">
+                    <div class="product__pagination blog__pagination" th:if="${totalPages} > 0">
+                        <th:block th:if="${pageGroupStart > 1}">
+                            <a th:href="@{/pet/searchpetlist(pg= ${pageGroupStart - 1}, searchType=${searchType}, key=${key}, division=${division})}"><span class="arrow_right"></span></a>
+                        </th:block>
+
+                        <th:block th:each="i : ${#numbers.sequence(pageGroupStart, pageGroupEnd)}">
+                            <a th:href="@{/pet/searchpetlist(pg= ${i}, searchType=${searchType}, key=${key}, division=${division})}"
+                               th:class="${currentPage == i} ? 'num on current' : 'num'">[[${i}]]</a>
+                        </th:block>
+
+                        <th:block th:if="${pageGroupEnd < lastPageNum}">
+                            <a th:href="@{/pet/searchpetlist(pg= ${pageGroupEnd + 1}, searchType=${searchType}, key=${key}, division=${division})}"><span class="arrow_right"></span></a>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2">
+                <div class="blog__sidebar">
+                    <!-- 좌측 sidebar 내용 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    </section><br></br>
+</th:block>
+</html>

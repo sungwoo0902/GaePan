@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:replace="~{cs/fragments/head :: head}">
+</head>
+<body>
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+<!-- Humberger Begin
+    -> 모바일 화면 구성이니 header 수정 되면 그거랑 비슷하게 하면 될 듯
+-->
+<div class="humberger__menu__overlay"></div>
+<div class="humberger__menu__wrapper">
+    <div class="humberger__menu__logo">
+        <a href="#">
+            <img src="img/logo.png" alt="">
+        </a>
+    </div>
+    <div class="humberger__menu__cart">
+        <ul>
+            <li>
+                <a href="#">
+                    <i class="fa fa-heart"></i>
+                    <span>1</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="humberger__menu__widget">
+        <div class="header__top__right__auth">
+            <a th:href="@{member/login}">
+                <i class="fa fa-user"></i> Login
+            </a>
+        </div>
+    </div>
+    <nav class="humberger__menu__nav mobile-menu">
+        <ul>
+            <li class="active"><a href="">Home</a></li>
+            <li><a th:href="@{my/index}">마이페이지</a></li>
+            <ul class="header__menu__dropdown">
+                <li><a th:href="@{/index}">GAEPAN 소개</a></li>
+                <li><a th:href="@{/pet/petlist}">분양</a></li>
+                <li><a th:href="@{/pet/missinglist}">제보</a></li>
+                <li><a th:href="@{/cs/index}">문의하기</a></li>
+            </ul>
+            </li>
+        </ul>
+    </nav>
+    <div id="mobile-menu-wrap"></div>
+    <div class="header__top__right__social">
+        <a href="#"><i class="fa fa-facebook"></i></a>
+        <a href="#"><i class="fa fa-twitter"></i></a>
+        <a href="#"><i class="fa fa-linkedin"></i></a>
+        <a href="#"><i class="fa fa-pinterest-p"></i></a>
+    </div>
+    <div class="humberger__menu__contact">
+        <ul>
+            <li>
+                <i class="fa fa-envelope"></i>
+                GaePan@gaepan.com
+            </li>
+            <li>후원자를 찾습니다.</li>
+        </ul>
+    </div>
+</div>
+<!-- Humberger End -->
+<header th:replace="~{fragments/header :: header}"></header>
+
+<th:block layout:fragment="content"></th:block>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

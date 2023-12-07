@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{my/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<th:block layout:fragment="content">
+    <form th:action="@{/my/infoCheck}" method="POST" id="myForm">
+        <main>
+            <div id="my">
+                <div class="info">
+                    <ul>
+                        <span class="menu_else"></span>
+                        <li><a th:href="@{/my/applylist}">전체신청내역</a></li>
+                        <li><a th:href="@{/my/diary}">입양일기</a></li>
+                        <li><a th:href="@{/my/qna}">나의Q&A</a></li>
+                        <li><a th:href="@{/my/support}">후원하기</a></li>
+                        <li><a th:href="@{/my/infoCheck}">개인정보설정</a></li>
+                        <li><a th:href="@{/pet/register}">아이 등록</a></li>
+                    </ul>
+                    <section>
+                        <article>
+                            <h3>비밀번호 확인</h3>
+                            <input type="hidden" name="uid" th:value="${myInfoDTO.uid}" />
+                            <input type="hidden" name="email" th:value="${myInfoDTO.email}" />
+                            <table border="0">
+                                <tr>
+                                    <td>사용자 ID</td>
+                                    <td id="passCheckId">[[${myInfoDTO.uid}]]</td>
+                                </tr>
+                                <tr>
+                                    <td>비밀번호 확인</td>
+                                    <td>
+                                        <input type="password" id="passCheck" name="pw" placeholder="비밀번호 확인"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="button-container">
+                                <button type="button" class="btnInfo" id="cancelButton">취소</button>
+                                <button type="submit" class="btnInfo" id="btnSubmit">확인</button>
+                            </div>
+                        </article>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </form>
+</th:block>
+</html>

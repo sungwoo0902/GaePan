@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{my/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<th:block layout:fragment="content">
+    <main>
+        <div id="my">
+            <div class="qna">
+                <ul>
+                    <span class="menu_else"></span>
+                    <li><a th:href="@{/my/applylist}">전체신청내역</a></li>
+                    <li><a th:href="@{/my/diary}">입양일기</a></li>
+                    <li><a th:href="@{/my/qna}">나의Q&A</a></li>
+                    <li><a th:href="@{/my/support}">후원하기</a></li>
+                    <li><a th:href="@{/my/infoCheck}">개인정보설정</a></li>
+                    <li><a th:href="@{/pet/register}">아이 등록</a></li>
+                </ul>
+                <section>
+                    <article>
+                        <h3>문의하기</h3>
+                        <table border="0">
+                            <tr>
+                                <th>번호</th>
+                                <th>문의유형1(cate)</th>
+                                <th>문의유형2(type)</th>
+                                <th>제목</th>
+                                <th>작성일</th>
+                                <th>상태</th>
+                            </tr>
+                            <tr th:each="list:${qnaList}" th:if="${list.uid != null}">
+                                <td class="bno" th:text="${list.bno}" />
+                                <td class="channel" th:text="${list.cateName}" />
+                                <td class="type" th:text="${list.typeName}" />
+                                <td class="tit">
+                                    <a th:text="${list.title}" th:href="@{/cs/qna/view(bno=${list.bno})}"></a>
+                                </td>
+                                <td class="date" th:text="${#temporals.format(list.regDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                                <td class="status"><span class="notAnswerYet">검토중</span></td>
+                            </tr>
+                        </table>
+                        <div class="page" th:if="${total} != 0">
+                            <span class="prev" th:if="${pageGroupStart > 1}">
+                                <a th:href="@{/my/qna(pg=${pageGroupStart - 1})}"><&nbsp;이전</a>
+                            </span>
+                            <span class="num">
+                                <th:block th:each="i : ${#numbers.sequence(pageGroupStart, pageGroupEnd)}">
+                                    <a th:href="@{/my/qna(pg=${i})}" th:classappend="${currentPage == i} ? 'current' : 'off'">
+                                        [[${i}]]
+                                    </a>
+                                </th:block>
+                            </span>
+                            <span class="next" th:if="${pageGroupEnd < lastPageNum}">
+                                <a th:href="@{/my/qna(pg=${pageGroupEnd + 1})}">다음&nbsp;></a>
+                            </span>
+                        </div>
+                    </article>
+                </section>
+            </div>
+        </div>
+    </main>
+</th:block>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{cs/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+
+
+
+<th:block layout:fragment="content">
+
+
+    <div class="container">
+        <section id="cs">
+            <br>
+            <br>
+            <div class="main" id="qnaList-main">
+                <div class="col-lg-3 col-md-5">
+                    <div class="sidebar">
+                        <div class="sidebar__item">
+                            <h4>공지사항</h4>
+                            <ul>
+                                <li><a th:href="@{/cs/notice/list(group='notice', cate=11)}">고객서비스</a></li>
+                                <li><a th:href="@{/cs/notice/list(group='notice', cate=12)}">반려동물</a></li>
+                                <li><a th:href="@{/cs/notice/list(group='notice', cate=13)}">제휴</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <section class="qna" id="qnaList-section">
+                    <div class="section-title product__discount__title">
+                        <h2><a th:href="@{/cs/notice/list(group=${boardDTO.group}, cate=${boardDTO.cate})}" class="btnTotal">[[${boardDTO.cateName}]]</a></h2>
+                    </div>
+
+                    <div class="card" id="noticeArticle">
+                        <div class="card-body">
+                            <h5 class="card-title">[[${boardDTO.title}]]</h5>
+                            <span id="uid">[[${boardDTO.uid}]]</span>&nbsp;
+                            <span>[[${#temporals.format(boardDTO.regDate, 'yyyy-MM-dd')}]]</span>
+                            <br>
+                            <br>
+                            <p class="card-text">[[${boardDTO.content}]]</p>
+
+                        </div>
+                    </div>
+
+
+                </section>
+            </div><!-- bootstrap 기존 설정은 안 건드리는 게 좋음(css 때문에) -->
+        </section>
+    </div>
+</th:block>
+
+</html>

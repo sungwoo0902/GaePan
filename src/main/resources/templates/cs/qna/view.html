@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{cs/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+
+
+
+<th:block layout:fragment="content">
+    <script>
+
+        // 글 수정
+        function showArticleUpdateForm() { // 매개변수 없는걸로 해도 메서드 이름 댓글 쪽이랑 같으면 작동안함
+            document.getElementById('title').style.display = 'none';
+            document.getElementById('content').style.display = 'none';
+            document.getElementById('articleUpdate').style.display = 'block';
+        }
+        function updateArticle(){
+
+            const articleUpdateForm = document.getElementById('articleUpdateForm');
+            articleUpdateForm.submit();
+            alert('글이 수정되었습니다');
+
+
+        }
+        function cancelArticleUpdate() {
+            // 수정 취소 시 폼 감추기 / showUpdateForm이랑 반대로 하면 됨
+            document.getElementById('title').style.display = 'block';
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('articleUpdate').style.display = 'none';
+        }
+
+        // 댓글 수정
+        function showUpdateForm(bno) {
+            // 숨겨진 수정 폼 보이기
+            document.getElementById('comment_' + bno).style.display = 'none';
+            document.getElementById('updateForm_' + bno).style.display = 'block';
+        }
+        function updateComment(bno) {
+            // 폼 제출을 사용하여 업데이트 로직을 구현할 수 있습니다.
+            const commentUpdateForm = document.getElementById('commentUpdateForm_' + bno);
+            var updatedComment = document.getElementById('updateTextarea_' + bno).value;
+            commentUpdateForm.submit();
+            alert('댓글이 수정되었습니다: ' + updatedComment);
+
+            // 수정 폼 감추기
+            document.getElementById('comment_' + bno).style.display = 'block';
+            document.getElementById('updateForm_' + bno).style.display = 'none';
+        }
+        function cancelUpdate(bno) {
+            // 수정 취소 시 폼 감추기
+            document.getElementById('comment_' + bno).style.display = 'block';
+            document.getElementById('updateForm_' + bno).style.display = 'none';
+        }
+
+        // view페이지에서는 아이디 마스킹처리를 할 필요가 없지!
+        // $(function(){
+        //     var uid = document.getElementsByClassName('uid');
+        //
+        //     // i, originalUid, maskedUid에 var 선언 해줘야지!!!!
+        //     for(var i=0 ; i<uid.length ; i++){
+        //         var originalUid = uid[i].innerText;
+        //         var markedUid = originalUid.substring(0,3) + "****";
+        //         uid[i].innerText = markedUid;
+        //     }
+        // });
+
+
+    </script>
+
+    <div class="container">
+        <section id="cs">
+            <br>
+            <br>
+            <div class="main" id="qnaList-main">
+                <div class="col-lg-3 col-md-3">
+                    <div class="sidebar">
+                        <div class="sidebar__item">
+                            <h4>고객문의</h4>
+                            <ul>
+                                <li><a th:href="@{/cs/qna/list(group='qna', cate=31)}">회원/자유게시판</a></li>
+                                <li><a th:href="@{/cs/qna/list(group='qna', cate=32)}">입양/분양</a></li>
+                                <li><a th:href="@{/cs/qna/list(group='qna', cate=33)}">제휴/이벤트</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <section class="qna" id="qnaList-section">
+                    <div class="section-title product__discount__title">
+                        <h2><a th:href="@{/cs/qna/list(group=${boardDTO.group}, cate=${boardDTO.cate})}" class="btnTotal">[[${boardDTO.cateName}]]</a></h2>
+                    </div>
+
+                    <div class="card" id="qnaArticle">
+                        <div class="card-body">
+                            <h5 id="title" class="card-title">[[${boardDTO.title}]]</h5>
+                            <span class="uid">[[${boardDTO.uid}]]</span>&nbsp;
+                            <span>[[${#temporals.format(boardDTO.regDate, 'yyyy-MM-dd')}]]</span>
+                            <a class="update-atag" href="#" onclick="showArticleUpdateForm()">수정</a>
+                            <a class="delete-atag" th:href="@{/cs/qna/articleDelete(bno=${boardDTO.bno}, cate=${boardDTO.cate})}">삭제</a>
+                            <hr>
+                            <p id="content" class="card-text">[[${boardDTO.content}]]</p>
+                            <div id="articleUpdate" style="display: none;">
+                                <form id="articleUpdateForm" th:action="@{/cs/qna/articleUpdate}" th:method="GET" >
+                                    <input type="hidden" name="bno" th:value="${boardDTO.bno}" />
+                                    <label for="updateTitle">제목:</label>
+                                    <input type="text" id="updateTitle" class="form-control" name="title" th:value="${boardDTO.title}" />
+                                    <textarea id="updateContent" class="form-control" name="content" th:text="${boardDTO.content}"></textarea>
+                                    <br>
+                                    <button type="button" class="smallBtn" onclick="updateArticle()">저장</button>
+                                    <button type="button" class="smallBtn" onclick="cancelArticleUpdate()">취소</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+
+
+                    <!--댓글 null이 아닐때 출력하고 null일때는 표현언어 오류 안생기도록!-->
+                    <div th:if="${replies != null}">
+                        <div><p>댓글</p></div>
+                        <div class="card" th:each="reply : ${replies}">
+                            <div class="card-body">
+                                <span class="uid">[[${reply.uid}]]</span>&nbsp;<!-- reply가 빈 문자열일때 .uid 연산에서 오류가 발생하는 것! -->
+                                <span>[[${#temporals.format(reply.regDate, 'yyyy-MM-dd')}]]</span>
+                                <a class="update-atag" href="#" th:onclick="'showUpdateForm(' + ${reply.bno} + ')'">수정</a>
+                                <a class="delete-atag" th:href="@{/cs/qna/commentDelete(bno=${reply.bno}, parent=${reply.parent})}">삭제</a>
+                                <hr>
+                                <p th:id="'comment_' + ${reply.bno}" class="card-text">[[${reply.comment}]]</p>
+                                <div th:id="'updateForm_' + ${reply.bno}" style="display: none;">
+                                    <form th:id="'commentUpdateForm_' + ${reply.bno}" th:action="@{/cs/qna/commentUpdate}" method="GET">
+                                        <input type="hidden" name="bno" th:value="${reply.bno}">
+                                        <input type="hidden" name="parent" th:value="${reply.parent}">
+                                        <textarea th:id="'updateTextarea_' + ${reply.bno}" class="form-control" name="comment" th:text="${reply.comment}"></textarea><br>
+                                    </form>
+                                    <button class="smallBtn" th:onclick="'updateComment(' + ${reply.bno} + ')'">저장</button>
+                                    <button class="smallBtn" th:onclick="'cancelUpdate(' + ${reply.bno} + ')'">취소</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+                    <!-- 댓글 입력창 추가 -->
+                    <div class="comment-section">
+                        <form th:action="@{/cs/qna/view}" method="POST">
+                            <input type="hidden" name="uid" th:value="${uid}">
+                            <input type="hidden" name="cate" th:value="${boardDTO.cate}"> <!-- boardDTO는 본 글을 나타냄  -->
+                            <input type="hidden" name="type" th:value="${boardDTO.type}"> <!-- boardDTO는 본 글을 나타냄  -->
+                            <input type="hidden" name="parent" th:value="${boardDTO.bno}"> <!-- 기존글의 bno를 parent로 insert해야하니깐 -->
+                            <div class="form-group">
+                                <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea> <!--name="content" 로 바인딩-->
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="qnaView-btnComment">등록</button>
+                        </form>
+                    </div>
+
+
+
+
+
+
+                </section>
+            </div><!-- bootstrap 기존 설정은 안 건드리는 게 좋음(css 때문에) -->
+        </section>
+    </div>
+</th:block>
+
+</html>

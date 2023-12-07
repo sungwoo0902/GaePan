@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<th:block layout:fragment="content">
+    <section id="admin_config_info" class="admin__section">
+        <article class="write">
+            <form action="write" method="post">
+                <input type="hidden" name="uid" th:value="${#authentication.principal.member.uid}" />
+                <table>
+                    <!-- group / cate / type 설정 -->
+                    <div class="row group_cate">
+                        <div class="col-md-4">
+                            <select id="boardGroup" class="form-control" name="group">
+                                <option value="null">게시판 선택</option>
+                                <option th:selected="${group} eq 'notice'" value="notice">공지사항</option>
+                                <option th:selected="${group} eq 'faq'" value="faq">FAQ</option>
+                                <option th:selected="${group} eq 'qna'" value="qna">QnA</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="cate" class="form-control" name="cate">
+                                <option selected disabled value="0">카테고리 선택</option>
+                                <option th:each="cate : ${cateDTO}" th:value="${cate.cate}" th:text="${cate.cateName}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="type" class="form-control" name="type">
+                                <option selected disabled value="0">카테고리2 선택</option>
+                                <option th:each="type : ${typeDTO}" th:value="${type.type}" th:text="${type.typeName}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <tr>
+                        <td>제목</td>
+                        <td>
+                            <input type="text" name="title" required placeholder="제목을 입력하세요." />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>작성자</td>
+                        <td>
+                            <input type="text" name="nick" th:value="${currentNick}" readonly />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>내용</td>
+                        <td>
+                            <textarea name="content" required placeholder="내용을 입력하세요."></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <div class="write__div">
+                    <input type="button" class="btnBack" value="취소하기">
+                    <th:block sec:authorize="isAuthenticated()" th:if="${currentRole != 3}">
+                        <input type="submit" class="btnSubmit" value="등록하기">
+                    </th:block>
+                </div>
+                <a th:href="@{/admin/board/list(group=${group}, cate=${cate})}" class="btnList">목록보기</a>
+            </form>
+        </article>
+    </section>
+</th:block>
+</html>

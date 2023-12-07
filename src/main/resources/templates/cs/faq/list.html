@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{cs/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+
+
+
+<th:block layout:fragment="content">
+
+    <div class="container">
+        <section id="cs">
+            <br>
+            <br>
+            <div class="main" id="qnaList-main">
+                <div class="col-lg-3 col-md-5">
+                    <div class="sidebar">
+                        <div class="sidebar__item">
+                            <h4>FAQ</h4>
+                            <ul>
+                                <li><a th:href="@{/cs/faq/list(group='faq', cate=21)}">회원/반려동물</a></li>
+                                <li><a  th:href="@{/cs/faq/list(group='faq', cate=22)}">입양/분양</a></li>
+                                <li><a  th:href="@{/cs/faq/list(group='faq', cate=23)}">제휴/이벤트</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+               <section class="qna" id="qnaList-section">
+                   <div class="section-title product__discount__title">
+                            <h2><a th:href="@{/cs/faq/list(group=${pageResponseDTO.group}, cate=${pageResponseDTO.cate})}" class="btnTotal">[[${pageResponseDTO.dtoList[0].cateName}]]</a></h2>
+                   </div>
+
+                   <div class="accordion" id="accordionExample">
+
+                       <div class="card" th:each="article, num : ${pageResponseDTO.dtoList}">
+                           <button class="btn btn-link" type="button" data-toggle="collapse" th:data-target="'#collapse' + ${num.index}" aria-expanded="true" th:aria-controls="'collapse' + ${num.index}" style="text-decoration: none">
+                               <div class="card-header" th:id="'heading' + ${num.index}">
+                                   <h5 class="mb-0">
+                                           [<span>[[${article.typeName}]]</span>]&nbsp; [[${article.title}]]
+                                   </h5>
+                               </div>
+                           </button>
+                           <!-- class="collapse show" 되있던 거 show 빼니까 화면출력할 때 닫힌 상태로 나옴 -->
+                           <div th:id="'collapse' + ${num.index}" class="collapse" th:aria-labelledby="'heading' + ${num.index}" data-parent="#accordionExample">
+                               <div class="card-body">
+                                   [[${article.content}]]
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </section>
+            </div>
+
+
+
+            <!-- bootstrap 기존 설정은 안 건드리는 게 좋음(css 때문에) -->
+        </section>
+    </div>
+</th:block>
+
+</html>

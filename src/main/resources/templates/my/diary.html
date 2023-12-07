@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{my/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<th:block layout:fragment="content">
+    <main>
+        <div id="my">
+            <div class="qna">
+                <ul>
+                    <span class="menu_else"></span>
+                    <li><a th:href="@{/my/applylist}">전체신청내역</a></li>
+                    <li><a th:href="@{/my/diary}">입양일기</a></li>
+                    <li><a th:href="@{/my/qna}">나의Q&A</a></li>
+                    <li><a th:href="@{/my/support}">후원하기</a></li>
+                    <li><a th:href="@{/my/infoCheck}">개인정보설정</a></li>
+                    <li><a th:href="@{/pet/register}">아이 등록</a></li>
+                </ul>
+                <section>
+                    <article>
+                        <h3>입양일기</h3>
+
+                        <table border="0">
+                            <tr>
+                                <th>번호</th>
+                                <th>제목</th>
+                                <th>내용</th>
+                                <th>동물명</th>
+                                <th>분류</th>
+                                <th>품종</th>
+                                <th>작성일</th>
+                            </tr>
+                            <tr th:each="list : ${diaryList}" th:if="${list.uid != null and list.division == 3 }">
+                                <td th:text="${list.no}" />
+                                <td>
+                                    <a th:text="${list.title}" th:href="@{/pet/adoptdetails(no=${list.no})}"></a>
+                                </td>
+                                <td>
+                                    <a th:text="${list.content}" th:href="@{/pet/adoptdetails(no=${list.no})}"></a>
+                                </td>
+                                <td th:text="${list.name}" />
+                                <td th:text="${list.cName}" />
+                                <td th:text="${list.tName}" />
+                                <td th:text="${#temporals.format(list.regDate, 'yyyy-MM-dd HH:mm:ss')}" />
+                            </tr>
+                        </table>
+                        <div class="page" th:if="${total} != 0">
+                            <span class="prev" th:if="${pageGroupStart > 1}">
+                                <a th:href="@{/my/diary(pg=${pageGroupStart - 1})}"><&nbsp;이전</a>
+                            </span>
+                            <span class="num">
+                                <th:block th:each="i : ${#numbers.sequence(pageGroupStart, pageGroupEnd)}">
+                                    <a th:href="@{/my/diary(pg=${i})}" th:classappend="${currentPage == i} ? 'current' : 'off'">
+                                        [[${i}]]
+                                    </a>
+                                </th:block>
+                            </span>
+                            <span class="next" th:if="${pageGroupEnd < lastPageNum}">
+                                <a th:href="@{/my/diary(pg=${pageGroupEnd + 1})}">다음&nbsp;></a>
+                            </span>
+                        </div>
+                    </article>
+                </section>
+            </div>
+        </div>
+    </main>
+</th:block>
+</html>

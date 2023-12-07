@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="co.kr.gaepan.mapper.my.MyIndexMapper">
+    <select id="selectQna" resultType="co.kr.gaepan.dto.my.MyQnaDTO">
+    SELECT
+        a.*,
+        b.`cateName`,
+        c.`typeName`
+    FROM `gp_board` AS a
+    LEFT JOIN `gp_board_cate` AS b ON a.`cate` = b.`cate`
+    LEFT JOIN `gp_board_type` AS c ON a.`type` = c.`type`
+    WHERE `uid` = #{currentUserUid}
+    ORDER BY `bno` DESC
+    LIMIT 2
+    </select>
+
+    <select id="findCname" resultType="co.kr.gaepan.dto.board.BoardCateDTO">
+        SELECT * FROM `gp_board_cate`
+    </select>
+
+    <select id="findTname" resultType="co.kr.gaepan.dto.board.BoardTypeDTO">
+        SELECT * FROM `gp_board_type`
+    </select>
+
+    <select id="selectDiary" resultType="co.kr.gaepan.dto.pet.PetRegisterDTO">
+        SELECT
+            a.*,
+            b.`cName`,
+            c.`tName`
+        FROM `gp_pet` AS a
+        LEFT JOIN `gp_pet_cate` AS b ON a.`cate` = b.`cate`
+        LEFT JOIN `gp_pet_type` AS c ON a.`type` = c.`type`
+        WHERE `uid` = #{currentUserUid}
+        ORDER BY `no` DESC
+        LIMIT 5
+    </select>
+
+    <select id="selectApplyList" resultType="co.kr.gaepan.dto.pet.PetAdoptApplyDTO">
+        SELECT
+            a.*,
+            b.`thumb`
+        FROM `gp_pet_adopt_apply` AS a
+        LEFT JOIN `gp_pet` AS b ON a.`petNo` = b.`no`
+        WHERE a.`uid` = #{uid}
+        ORDER BY a.`no` DESC
+    </select>
+</mapper>

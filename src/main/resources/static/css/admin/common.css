@@ -1,0 +1,624 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: "Cairo", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+}
+/* admin header */
+.admin__container{
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: 30px;
+}
+
+.admin__container > aside{
+    position: relative;
+    padding-right: 15px;
+    float: left;
+    height: auto;
+    border-left: 1px solid #f5f5f5;
+    box-sizing: border-box;
+    padding-left: 0 !important;
+}
+
+.admin__header_logo{
+    max-width: 150px;
+}
+
+.header__logo img{
+    min-width: 60px;
+    min-height: 50px;
+}
+
+/*Green PJ ver2 admin aside */
+.admin_container {
+    width: 100%;
+    max-width: 1500px;
+    height: auto;
+    /*overflow: hidden;*/
+}
+
+.admin_container > aside{
+    padding-right: 0px !important;
+    width: 100%;
+    max-width: 270px;
+}
+
+
+.admin_container > aside > div > nav{
+    background: #f5f5f5;
+    position: relative;
+    padding: 30px 25px 10px 40px;
+    cursor: pointer;
+}
+
+.admin_container > div {
+    padding-left: 0px!important;
+    /*margin-right: 15px;*/
+}
+
+#gnb {
+    width: 100%;
+    height: auto;
+    overflow-x: hidden;
+    display: block;
+    padding: 10px 0 12px 0;
+}
+#gnb > li {
+    width: 100%;
+    min-height: 66px;
+    border-top: 1px solid #f5f5f5;
+    box-sizing: border-box;
+}
+#gnb > li:last-child {
+    border-bottom: 1px solid #fafafa;
+}
+
+#gnb > li > a {
+    display: block;
+    width: 100%;
+    height: 66px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #020715;
+    line-height: 66px;
+    text-indent: 10px;
+}
+#gnb > li > a:hover {
+    color: #8972ee;
+}
+
+#gnb > li > a > i {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+#gnb ol {
+    display: none;
+    width: 100%;
+    height: auto;
+}
+#gnb ol > li {
+    width: 100%;
+    height: 32px;
+}
+#gnb ol > li > a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-indent: 35px;
+    color: #5caeef;
+}
+#gnb ol > li > a:hover {
+    color: #8972ee;
+}
+
+/*=========================================*/
+
+main > section {
+    float: right;
+    width: 1130px;
+    min-height: 600px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+main > section > nav {
+    position: relative;
+    width: 100%;
+    height: 46px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #f5f5f5;
+    box-sizing: border-box;
+}
+
+main > section > nav > h3 {
+    position: absolute;
+    left: 0;
+    bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+main > section > nav > p {
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+}
+main > section > nav > p > strong {
+    font-weight: bold;
+    color: #5caeef;
+}
+
+main > section > article {
+    overflow: hidden;
+}
+
+main > section > article section {
+    margin-bottom: 16px;
+}
+main > section > article section > p {
+    background: #eaeaea;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+}
+
+main h4 {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.pagination .board__cate{
+    margin: 0 20px;
+}
+.pagination .board__cate a{
+    color: #020715;
+}
+.pagination .board__cate a:hover{
+    color: #8972ee;
+}
+
+/* ============== admin table ============== */
+
+main table{
+    word-break: break-all;
+    height: auto;
+    width: 100%;
+}
+main table th {
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+/* admin config table css 적용 */
+.admin__article table tr > td:nth-child(1) {
+    width: 160px;
+    border-top: 1px solid #f5f5f5;
+    border-bottom: 1px solid #f5f5f5;
+    background: #f6f6f6;
+    padding: 10px;
+    text-align: left;
+}
+.admin__article table tr > td {
+    border-top: 1px solid #f5f5f5;
+    border-bottom: 1px solid #f5f5f5;
+    padding: 10px;
+    vertical-align: middle !important;
+}
+
+
+/* 그외 admin table css 적용 */
+.admin__section .table tr > td {
+    border-top: 1px solid #f5f5f5;
+    border-bottom: 1px solid #f5f5f5;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle !important;
+}
+.admin__section .table tr > td:nth-child(1){
+    width: 50px;
+    border-top: 1px solid #f5f5f5;
+    border-bottom: 1px solid #f5f5f5;
+    background: #f6f6f6;
+    padding: 10px;
+    text-align: center;
+}
+/* =========== admin board write ================== */
+.admin__section > .write > form {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 2px solid #111;
+    margin-bottom: 1rem;
+}
+
+.admin__section > .write > form > .group_cate {
+    padding: 16px 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+}
+.admin__section > .write > form > table tr {
+    width: 100%;
+    height: 26px;
+}
+.admin__section > .write > form > table td {
+    padding: 16px;
+    border-bottom: 1px solid #ccc;
+    font-size: 16px;
+}
+.admin__section > .write > form > table tr > td {
+    border: 1px solid #e5e5e5;
+    padding: 6px 6px 6px 12px;
+    color: #111;
+}
+.admin__section > .write > form > table td:first-child {
+    width: 100px;
+}
+.admin__section > .write > form > table input {
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    box-sizing: border-box;
+    text-indent: 10px;
+    border: 0;
+}
+.admin__section > .write > form > table select {
+    width: 100px;
+    height: 40px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+.admin__section > .write > form > table select * {
+    font-size: inherit;
+}
+.admin__section > .write > form > table textarea {
+    width: 100%;
+    height: 360px;
+    resize: none;
+    font-size: 16px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 0;
+}
+.write__div{
+    float: right;
+    margin: 10px 0;
+}
+
+.admin_board_right{
+    float: right;
+    margin-bottom: 30px;
+    margin-top: 10px;
+}
+.admin_board_right a{
+    margin-left: 15px;
+}
+.admin_board_left{
+    float: left;
+    margin-bottom: 30px;
+    margin-top: 10px;
+}
+.admin_board_left a{
+    margin-right: 15px;
+}
+.boardList{
+    clear: both;
+}
+
+
+/* =========== admin board view ================== */
+.admin__section > .view {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+.admin__section > .view table {
+    width: 100%;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    border-collapse: collapse;
+    border-top: 2px solid #8798a3;
+}
+
+.admin__section > .view table tr:first-child {
+    background: #fafafa !important;
+}
+.admin__section > .view table tr > td {
+    border: 1px solid #e5e5e5;
+    padding: 6px 6px 6px 12px;
+    color: #111;
+}
+.admin__section > .view table tr > td  > textarea{
+    border: 0;
+    height: 360px;
+    margin: 15px;
+}
+
+.admin__section > .view table tr > td > div {
+    text-align: left;
+}
+.admin__section > .view table tr > td > strong {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    padding-top: 10px;
+}
+.admin__section > .view table tr > td > span {
+    display: block;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #bc2e13;
+}
+
+.admin__section > .view table tr > td > p {
+    padding: 6px;
+    overflow: hidden;
+}
+.admin__section > .view table tr > td > p > span {
+    font-size: 14px;
+}
+.admin__section > .view table tr > td > p > span:nth-child(1) {
+    float: left;
+}
+.admin__section > .view table tr > td > p > span:nth-child(2) {
+    float: right;
+}
+
+/* ============= admin board commnet ============== */
+.admin__section > .view > .commentList > .comments > div > span {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+
+}
+.admin__section > .view > .commentList > .comments > div .comment {
+    width: 100%;
+    padding: 10px 21px 2px;
+    box-sizing: border-box;
+    resize: none;
+    border: 0;
+    color: #000;
+    margin-top: 15px;
+    font-size:17px;
+    border-bottom: 3px solid #e9e9e9;
+    background-color: rgba(158, 158, 158, 0.1);
+    clear: both;
+}
+.admin__section > .view > .commentList > .comments > div .modifyCommentDiv {
+    width: 100%;
+    padding: 10px 21px 2px;
+    box-sizing: border-box;
+    resize: none;
+    border: 0;
+    color: #000;
+    margin-top: 15px;
+    font-size:17px;
+    border-bottom: 3px solid #e9e9e9;
+    background-color: #fff;
+    clear: both;
+}
+.admin__section > .view > .commentList > .comments > div .comment > span {
+    font-size: 13px;
+    font-weight: bold;
+}
+.admin__section > .view > .commentList > .comments > div .modifyCommentDiv > span {
+    font-size: 13px;
+    font-weight: bold;
+}
+.admin__section > .view > .commentList > .comments > div .comment > textarea {
+    border: none;
+    background: none;
+    margin-top: 5px;
+    line-height: 1.7;
+}
+.admin__section > .view > .commentList > .comments > div .modifyCommentDiv > textarea {
+    border: none;
+    background: none;
+    margin-top: 5px;
+    line-height: 1.7;
+}
+.empty {
+    width: 100%;
+    height: 100px;
+    padding: 40px 21px 2px;
+    box-sizing: border-box;
+    resize: none;
+    border: 0;
+    color: grey;
+    margin-top: 15px;
+    font-size:17px;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 3px solid #e9e9e9;
+    background-color: rgba(158, 158, 158, 0.1);
+}
+.commentList{
+    clear: both;
+}
+
+#formCheck{
+    width: 1080px;
+    margin-top: 15px;
+}
+#formCheck .tit{
+    width: 400px;
+}
+#formCheck .tit > div{
+    width: 400px;
+}
+
+#formCheck .levMember{
+    color : #ff3333;
+}
+#formCheck .ingMember{
+    color : #28a745;
+}
+#formCheck .warningMember{
+    color : #ffc107;
+}
+#formCheck .blackMember{
+    color: #dc3545;
+}
+#formCheck .leaveMember{
+    color : #e83e8c;
+}
+#formCheck .adminMember{
+    color: #8972ee;
+}
+
+.admin_title_board{
+    display: flex;
+    max-width: 90%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.admin_title_board a{
+    display: block;
+    color : #212529;
+}
+.admin_title_board a:hover{
+    color: #8972ee;
+}
+
+.board_comment a{
+    padding: 0 8px;
+    color: #2A80B9;
+}
+.board_comment a:hover{
+    color: #ff3333;
+}
+
+.table_overflow{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+
+/*================================*/
+
+.header__top__left .header__logo a {
+    display: inline-block;
+    max-width: 18%;
+}
+
+.admin__section{
+    margin-left : 30px;
+}
+
+.admin__section nav a{
+    color: #6f6f6f;
+}
+
+.admin__section nav a:hover{
+    text-decoration: none;
+    outline: none;
+    color: #8972ee;
+}
+
+.admin__p{
+    text-align: right;
+    margin-right: 15px;
+}
+
+/* ===================== write ===================== */
+
+
+/* ============= search ============= */
+#serachForm{
+    margin: 10px -15px;
+}
+
+.admin_search_div{
+    display: flex;
+    display: -ms-flexbox;
+    flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+}
+.admin_search_div > div {
+    margin: 0 15px 10px 15px;
+}
+
+.admin_search_form{
+    margin-bottom: 10px;
+}
+
+.active{
+    background-color: #c4baee !important;
+    color: #020715 !important;
+}
+
+/* =============== chart =================== */
+#chartContainer{
+    width: 100%;
+    height: 370px;
+    max-width: 920px;
+    margin: 0 auto;
+}
+
+
+/* admin footer */
+
+.admin__footer{
+    margin-left: 30px;
+    margin-top: 50px;
+}
+
+/*================ butten =====================*/
+
+.primary-btn {
+    display: inline-block;
+    font-size: 14px;
+    padding: 10px 28px 10px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 700;
+    background: #8972ee;
+    letter-spacing: 2px;
+}
+
+.deleteBtn{
+    display: inline-block;
+    font-size: 14px;
+    padding: 10px 28px 10px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 700;
+    background: #586574;
+    letter-spacing: 2px;
+}
+
+.blackList_Btn{
+    display: inline-block;
+    font-size: 14px;
+    padding: 10px 28px 10px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 700;
+    background: #EC1B30;
+    letter-spacing: 2px;
+}
+
+.searchBtn{
+    display: inline-block;
+    font-size: 11px;
+    padding: 10px 14px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 500;
+    background: #2A80B9;
+    letter-spacing: 2px;
+}
+.searchBtn:hover{
+    background: #8972ee;
+    color: #fff;
+}
+
+.admin_btn{
+    float: right;
+}

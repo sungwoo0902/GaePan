@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<th:block layout:fragment="content">
+    <section class="admin__section">
+        <nav>
+            <h3>반려동물 관리</h3>
+            <p class="admin__p">
+                <a th:href="@{/admin/index}">HOME</a> &gt; 반려동물 &gt;
+                <strong>반려동물</strong>
+            </p>
+        </nav>
+
+        <div class="row">
+            <!-- 검색 -->
+            <div class="col-md-12">
+                <form id="serachForm" class="row">
+                    <!-- 검색 카테고리 만들기 -->
+                    <div class="col-md-3">
+                        <select class="form-control" name="searchType">
+                            <!-- 검색할 때 옵션이  null이면 이거 선택 | 아니면 비워둠 -->
+                            <option value="prodName">종류</option>
+                            <option value="prodNo">All</option>
+                            <option value="company">유기견</option>
+                            <option value="seller">유기묘</option>
+                        </select>
+                    </div>
+                    <!-- 어떤 키워드로 검색할지 키워드 작성칸 -->
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" search/>
+                    </div>
+                    <div class="col-md-2">
+                        <!-- 검색 버튼 -->
+                        <div>
+                            <input class="form-control searchBtn" type="submit" value="검색" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        <table class="table table-hover">
+            <form id="formCheck" action="#" method="post">
+                <thead>
+                <tr>
+                    <th scope="col"><input type="checkbox" name="all" id="selectAll"/></th>
+                    <th scope="col">번호</th>
+                    <th scope="col">이미지</th>
+                    <th scope="col">종류</th>
+                    <th scope="col">품종</th>
+                    <th scope="col">글쓴이</th>
+                    <th scope="col">날짜</th>
+                    <th scope="col">관리</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="pet : ${Adminpet}">
+                    <td class="chk">
+                        <input type="checkbox" name ="chk" class="checkbox" value="">
+                    </td>
+                    <td>[[${pet.no}]]</td>
+                    <td>
+                        <img style="width: 50px; height: 50px" th:src="@{/upload/} + ${pet.thumb}">
+                    </td>
+                    <td>[[${pet.cName}]]</td>
+                    <td>[[${pet.tName}]]</td>
+                    <td>[[${pet.uid}]]</td>
+                    <td th:text="${#temporals.format(pet.regDate, 'yy-MM-dd')}"></td>
+                    <td>
+                        <a href="#" class="btn btn-sm btn-outline-danger">
+                            <i class="fa fa-trash-o"></i>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </form>
+        </table>
+        <input type="button" class="deleteBtn" value="선택삭제" />
+
+        <div class="col-lg-12">
+            <div class="product__pagination blog__pagination">
+                <th:block th:if="${pageGroupStart > 1}">
+                    <a th:href="@{/admin/animal/pet(pg= ${pageGroupStart - 1})}"><span class="arrow_right"></span></a>
+                </th:block>
+
+                <th:block th:each="i : ${#numbers.sequence(pageGroupStart, pageGroupEnd)}">
+                    <a th:href="@{/admin/animal/pet(pg= ${i})}"
+                       th:class="${currentPage == i} ? 'num on current' : 'num'">[[${i}]]</a>
+                </th:block>
+
+                <th:block th:if="${pageGroupEnd < lastPageNum}">
+                    <a th:href="@{/admin/animal/pet(pg= ${pageGroupEnd + 1})}"><span class="arrow_right"></span></a>
+                </th:block>
+            </div>
+        </div>
+    </section>
+</th:block>
+</html>

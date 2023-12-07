@@ -1,0 +1,179 @@
+/*common*/
+#cs{
+    margin-bottom: 100px;
+}
+
+.sidebar__item a{
+    width: 150px;
+}
+
+
+
+/*index*/
+.card-deck{
+    width: 1150px;
+}
+
+
+.image-container{
+    text-align: center;
+    line-height: 150px;
+    display: inline-block;
+    margin-right:80px;
+}
+
+#image-container3{
+    margin-right: 0px;
+}
+
+.image-container img {
+    width: 300px;
+
+}
+
+
+.index-atag{
+    color: #3818c9;
+    display: block;
+}
+
+#index-button{
+    display: block;
+    width: 200px;
+    height: 50px;
+    margin-left: 435px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background: #d4ccf7;
+    border: none;
+}
+.card-body{
+
+}
+
+/*notice*/
+#noticeArticle{
+    height: 500px;
+}
+
+/* qna */
+#qnaList-main{
+    position: relative;
+    display: flex;
+}
+#qnaList-section{
+    margin-left: -100px;
+}
+#qnaList-table{
+    width: 900px;
+}
+
+#qnaList-table > tbody a{
+    color: black;
+}
+
+#qnaList-button{
+    top: 40px;
+    position: absolute;
+    right: 60px;
+    width: 200px;
+    height: 50px;
+    background: #d4ccf7;
+    border: none;
+}
+
+#qnaList-page{
+    position: absolute;
+    right: 480px;
+}
+
+#qnaView-btnComment{
+    border: none;
+    background-color: #8972ee;
+    float: right;
+}
+
+.delete-atag{
+    color: #3818c9;
+    position: absolute;
+    right: 10px;
+}
+
+.update-atag{
+    color: #3818c9;
+    position: absolute;
+    right: 50px;
+}
+
+.smallBtn{
+    border: none;
+    color: white;
+    background-color: #8972ee;
+}
+
+#updateTitle{
+    display: inline-block;
+    width: 600px;
+}
+
+#updateContent{
+    line-height: inherit;
+    height: 320px;
+}
+
+#qnaArticle{
+    height: 500px;
+}
+
+#qnaWriteForm{
+    padding-top: 0px;
+    margin-bottom: -100px;
+}
+
+.contact__form__title h2{
+    color: #8972ee;
+}
+
+#qnaWriteContent{
+    height: 350px;
+}
+
+/*bootstrap 기존 클래스는 건드리지 말기*/
+.btnTotal {
+    color: black;
+}
+.card{
+    width: 900px;
+}
+
+
+/*faq*/
+#accordionExample{
+    width: 900px;
+}
+
+.accordion > div{
+    border-color: #8972ee;
+    background-color: white;
+}
+
+.accordion > div > button{
+    text-align: left;
+}
+
+.accordion > div div{
+    background-color: white;
+    border: none;
+}
+
+.card-body {
+    padding-left: 35px; /* 여백 크기 조절 */
+}
+
+
+
+
+
+
+
+

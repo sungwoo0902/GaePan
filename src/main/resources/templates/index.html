@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<th:block layout:fragment="content">
+    <!-- Hero Section Begin
+        => 여기가 header 바로 밑에 있는 검색 바 라인
+    -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hero__search">
+                        <div class="hero__search__form">
+                            <form th:action="@{pet/searchpetlist}" method="get" class="nice-select-container">
+                                <select class="nice-select-division" name="division">
+                                    <option>글 유형</option>
+                                    <option value="1">분양</option>
+                                    <option value="2">실종</option>
+                                    <option value="3">입양 일기</option>
+                                </select>
+                                <!-- 두 번째 셀렉트 박스 -->
+                                <select class="nice-select-searchType" name="searchType">
+                                    <option>동물 유형</option>
+                                    <option value="cName">종류</option>
+                                    <option value="tName">품종</option>
+                                    <option value="name">반려동물이름</option>
+                                </select>
+                                <input type="text" id="searchInput" name="key" placeholder="강아지와 고양이 외의 동물을 검색하실려면 기타를 입력해 주세요">
+                                <button style="background-color: mediumpurple; color: white; border: none; width: 100px;" type="submit">검색</button>
+                            </form>
+                        </div>
+                    </div>
+                    <br><br>
+                    <!-- 이게 메인 카테고리와 같이 뜨는 메인 이미지 -->
+                    <!--<div class="hero__item set-bg" data-setbg="/img/hero/m_imageView.jpg"></div>-->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section End -->
+
+    <!-- Categories Section Begin
+        -> 이게 우측으로 넘어가면서 이미지 나열 하는 친구
+    -->
+    <section class="categories">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h2>GaePan 실종 동물 목록</h2>
+                    </div>
+                </div>
+                <div class="categories__slider owl-carousel">
+                    <th:block th:each="mainMissingPet : ${MainMissingPet}">
+                        <div class="col-lg-3">
+                            <div class="categories__item set-bg" th:data-setbg="@{/upload/} + ${mainMissingPet.thumb}"></div>
+                            <div class="featured__item__text">
+                                <h6 th:text="${mainMissingPet.tName}"></h6>
+                                <h5><a th:href="@{pet/details(no=${mainMissingPet.getNo()})}" style="color: #8972ee;" th:text="${mainMissingPet.name}"></a></h5>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Categories Section End -->
+
+    <!-- Featured Section Begin -->
+    <section class="featured spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h2>GaePan 동물 목록</h2>
+                    </div>
+                    <div class="featured__controls">
+                        <ul>
+                            <li class="active" data-filter="*">All</li>
+                            <li data-filter=".fresh-meat">유기견</li>
+                            <li data-filter=".vegetables">유기묘</li>
+                            <li data-filter=".fastfood">기타</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- div태그의 class값에 해당 type값이 들어가면 그 type에 해당 list만 보이게 js 처리 되어있는 듯
+                -> 그 type을 data-filter=".type" 값으로 List 뽑는거 같음
+            -->
+            <div class="row featured__filter">
+                <div class="col-lg-3 col-md-4 col-sm-6 mix fresh-meat" th:each="MainPetDog : ${MainPetDog}">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" th:data-setbg="@{/upload/} + ${MainPetDog.thumb}">
+                        </div>
+                        <div class="featured__item__text">
+                            <h6 th:text="${MainPetDog.tName}"></h6>
+                            <h5><a th:href="@{pet/details(no=${MainPetDog.getNo()})}" style="color: #8972ee;" th:text="${MainPetDog.name}"></a></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 mix vegetables" th:each="MainPetCat : ${MainPetCat}">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" th:data-setbg="@{/upload/} + ${MainPetCat.thumb}"></div>
+                        <div class="featured__item__text">
+                            <h6 th:text="${MainPetCat.tName}"></h6>
+                            <h5><a th:href="@{pet/details(no=${MainPetCat.getNo()})}" style="color: #8972ee;" th:text="${MainPetCat.name}"></a></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 mix fastfood" th:each="MainPetEtc : ${MainPetEtc}">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" th:data-setbg="@{/upload/} + ${MainPetEtc.thumb}"></div>
+                        <div class="featured__item__text">
+                            <h6 th:text="${MainPetEtc.tName}"></h6>
+                            <h5><a th:href="@{pet/details(no=${MainPetEtc.getNo()})}" style="color: #8972ee;" th:text="${MainPetEtc.name}"></a></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Featured Section End -->
+</th:block>
+</html>

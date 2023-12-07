@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="co.kr.gaepan.mapper.my.MyQnaMapper">
+    <!-- my.qna 매퍼 XML -->
+    <select id="select_all" resultType="co.kr.gaepan.dto.my.MyQnaDTO" parameterType="map">
+        SELECT
+        a.*,
+        b.`cateName`,
+        c.`typeName`
+        FROM `gp_board` AS a
+        LEFT JOIN `gp_board_cate` AS b ON a.`cate` = b.`cate`
+        LEFT JOIN `gp_board_type` AS c ON a.`type` = c.`type`
+        WHERE a.`uid` = #{uid} AND a.`title` IS NOT NULL
+        ORDER BY a.`bno` DESC
+        LIMIT #{start}, 10
+    </select>
+
+
+    <select id="selectQnaCountTotal" resultType="int">
+        SELECT COUNT(*) FROM `gp_board` WHERE uid = #{uid}
+    </select>
+
+    <select id="findCname" resultType="co.kr.gaepan.dto.board.BoardCateDTO">
+        SELECT * FROM `gp_board_cate`
+    </select>
+
+    <select id="findTname" resultType="co.kr.gaepan.dto.board.BoardTypeDTO">
+        SELECT * FROM `gp_board_type`
+    </select>
+</mapper>

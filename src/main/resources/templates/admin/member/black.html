@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<th:block layout:fragment="content">
+    <section class="admin__section">
+        <nav>
+            <h3>블랙리스트</h3>
+            <p class="admin__p">
+                <a th:href="@{/admin/index}">HOME</a> &gt; 회원관리 &gt;
+                <strong>블랙리스트</strong>
+            </p>
+        </nav>
+
+        <form id="formCheck" action="#" method="post">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            <input type="checkbox" name="all" id="selectAll"/>
+                        </th>
+                        <th scope="col">번호</th>
+                        <th scope="col">아이디</th>
+                        <th scope="col">이름</th>
+                        <th scope="col">닉네임</th>
+                        <th scope="col">성별</th>
+                        <th scope="col">휴대폰 번호</th>
+                        <th scope="col">이메일</th>
+                        <th scope="col">양육경력</th>
+                        <th scope="col">주소</th>
+                        <th scope="col">가입일</th>
+                        <th scope="col">등록일</th>
+                        <th scope="col">관리</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                <th:block th:each="member : ${memberDTO}">
+                    <tr>
+                        <td class="chk">
+                            <input type="checkbox" name="chk" class="checkbox" th:value="${member.no}">
+                        </td>
+                        <td th:text="${member.rownum}"></td>
+                        <td th:text="${member.uid}"></td>
+                        <td th:text="${member.name}"></td>
+                        <td th:text="${member.nick}"></td>
+                        <td>
+                            <th:block th:if="${member.gender == 1}">
+                                <span>남</span>
+                            </th:block>
+                            <th:block th:if="${member.gender == 2}">
+                                <span>여</span>
+                            </th:block>
+                        </td>
+                        <td th:text="${member.hp}"></td>
+                        <td th:text="${member.email}"></td>
+                        <td th:text="${member.exp}"></td>
+                        <td th:text="${member.addr1}"></td>
+                        <td th:text="${#temporals.format(member.regDate, 'MM-dd')}"></td>
+                        <td>
+                            <th:block th:if="${member.levDate != null}">
+                            <span class="levMember"
+                                  th:text="${#temporals.format(member.levDate, 'MM-dd')}"></span>
+                            </th:block>
+                            <th:block th:unless="${member.levDate != null}">
+                                <span class="ingMember" th:text="가입중"></span>
+                            </th:block>
+                        </td>
+                        <td class="memberRoles" th:data-type="${member.role}">
+                            <th:block th:switch="${member.role}">
+                                <span th:case="1" class="nomalMember">일반</span>
+                                <span th:case="2" class="warningMember">주의</span>
+                                <span th:case="3" class="blackMember">블랙</span>
+                                <span th:case="4" class="leaveMember">탈퇴</span>
+                                <span th:case="99" class="adminMember">관리자</span>
+                            </th:block>
+                        </td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+            <th:block th:if="${currentRole == 99}">
+                <input type="button" class="blackListRemove_Btn" value="블랙리스트 해제"/>
+                <input type="button" class="leaveMember_Btn" value="회원 추방"/>
+            </th:block>
+        </form>
+
+        <div class="col-lg-12 mt-5">
+            <div class="product__pagination blog__pagination">
+                <!-- 이전 페이지 -->
+                <th:block th:if="${pm.prev}">
+                    <a th:href="@{'black?role=3' + '&' + ${pm.makeQuery(pm.startPage-1)}}">
+                        <i class="fa fa-long-arrow-left"></i>
+                    </a>
+                </th:block>
+                <!-- 현재 페이지-->
+                <th:block th:each="i : ${#numbers.sequence(pm.startPage, pm.endPage)}">
+                    <a th:class="${pm.cri.page == i} ? 'active' : ''"
+                       th:href="@{'black?role=3' + '&' + ${pm.makeQuery(i)}}">[[${i}]]</a>
+                </th:block>
+                <!-- 다음 페이지 -->
+                <th:block th:if="${pm.next}">
+                    <a th:href="@{'black?role=3' + '&' + ${pm.makeQuery(pm.endPage+1)}}">
+                        <i class="fa fa-long-arrow-right"></i>
+                    </a>
+                </th:block>
+            </div>
+        </div>
+    </section>
+</th:block>
+</html>
+<script th:src="@{/js/admin/blackListRemove.js}"></script>
+<script th:src="@{/js/admin/leaveMember.js}"></script>

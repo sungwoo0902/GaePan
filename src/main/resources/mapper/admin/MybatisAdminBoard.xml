@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="co.kr.gaepan.mapper.admin.MybatisAdminBoardMapper">
+
+    <!-- board 조회수 증가 -->
+    <update id="updateViewCnt" parameterType="int">
+        UPDATE gp_board SET hit = hit + 1
+        WHERE bno = #{bno}
+    </update>
+
+    <!-- 검색 쿼리 -->
+    <sql id="search">
+        <if test='searchType != null and !searchType.equals("") and searchType != "n" '>
+            <choose>
+                <when test='searchType == "tc"'>
+                    <!--
+                        CONCAT : 문자열 이어주기 위해 쓰는친구
+                        Like : 해당 문자열 있으면 검색
+                        % == *
+                    -->
+                    AND (
+                        (title LIKE CONCAT('%',#{keyword},'%'))
+                        OR (content LIKE CONCAT('%',#{keyword},'%'))
+                    )
+                </when>
+                <when test='searchType == "total"'>
+                    AND (
+                        (title LIKE CONCAT('%',#{keyword},'%'))
+                        OR (content LIKE CONCAT('%',#{keyword},'%'))
+                        OR (nick LIKE CONCAT('%',#{keyword},'%'))
+                    )
+                </when>
+                <otherwise>
+                    <!--
+                       나머지는 searchType과 검색하고자하는 열이 같으니깐 이렇게 표현 해줄 수 있음
+                       ${}로 하는 이유는 #{}을 하면 WHERE 'searchType'이 되니깐 문법적 오류다
+                   -->
+                    AND ${searchType} LIKE CONCAT('%',#{keyword},'%')
+                </otherwise>
+            </choose>
+        </if>
+    </sql>
+
+    <!-- board List 출력 -> [검색에 따라서] paging 처리까지 됨 -->
+    <select id="searchList" resultType="co.kr.gaepan.dto.admin.GP_AdminBoardDTO">
+        SELECT
+            @rownum := @rownum + 1 AS rownum,
+            B.*,
+            BC.cateName AS categoryName,
+            BT.typeName AS typeName,
+            M.nick
+        FROM gp_board AS B
+        JOIN gp_member AS M
+            ON B.uid = M.uid
+        JOIN gp_board_cate AS BC
+            ON B.cate = BC.cate
+        JOIN gp_board_type AS BT
+            ON B.`type` = BT.`type`
+            ,(SELECT @rownum := 0) AS R
+        WHERE `group` = #{group}
+            AND title IS NOT NULL
+            AND (
+            <choose>
+                <!-- cate가 10, 20, 30일 경우 -->
+                <when test="cate == 10 or cate == 20 or cate == 30">
+                    1=1 <!-- 전체 조회를 위한 항상 참인 조건 -->
+                </when>
+                <!-- 그 이외의 경우 -->
+                <otherwise>
+                    (B.cate = #{cate})
+                </otherwise>
+            </choose>
+            )
+        <include refid="search" />
+        ORDER BY rownum DESC
+        LIMIT #{startRow}, #{perPageNum}
+    </select>
+
+    <!-- 게시글 상세 보기 -->
+    <select id="findById" resultType="co.kr.gaepan.dto.admin.GP_AdminBoardDTO">
+        SELECT
+            B.*,
+            BT.typeName,
+            M.nick
+        FROM gp_board B
+        JOIN gp_board_type AS BT
+            ON B.`type` = BT.`type`
+        JOIN gp_member AS M
+            ON B.uid = M.uid
+        WHERE bno = #{bno};
+    </select>
+
+    <!-- 게시글 수정 -->
+    <update id="modifyById" parameterType="co.kr.gaepan.dto.admin.GP_AdminBoardDTO">
+        UPDATE gp_board SET
+            title = #{title},
+            content = #{content},
+            `group` = #{group},
+            cate = #{cate},
+            `type` = #{type}
+        WHERE bno = #{bno};
+    </update>
+
+    <!-- 게시글 삭제(checkbox) -->
+    <delete id="deleteAdminBoard">
+        DELETE FROM gp_board
+        WHERE bno in
+        <foreach item="board" index="index" collection="boardDTO"
+                 open="(" separator="," close=")">
+            #{board.bno}
+        </foreach>
+    </delete>
+
+    <!-- 게시글 삭제(bno) -->
+    <delete id="deleteById">
+        DELETE FROM gp_board
+        WHERE bno = #{bno}
+    </delete>
+
+    <!-- 해당 검색 결과에 나오는 게시글 총 개수 -->
+    <select id = "searchListCount" parameterType="co.kr.gaepan.util.SearchCriteria"
+            resultType="int">
+        SELECT
+            count(*)
+        FROM gp_board AS B
+        JOIN gp_member AS M
+            ON B.uid = M.uid
+        JOIN gp_board_cate AS BC
+            ON B.cate = BC.cate
+        JOIN gp_board_type AS BT
+            ON B.`type` = BT.`type`
+            ,(SELECT @rownum := 0) AS R
+        WHERE `group` = #{group}
+            AND title IS NOT NULL
+            AND (
+            <choose>
+                <!-- cate가 10, 20, 30일 경우 -->
+                <when test="cate == 10 or cate == 20 or cate == 30">
+                    1=1 <!-- 전체 조회를 위한 항상 참인 조건 -->
+                </when>
+                <!-- 그 이외의 경우 -->
+                <otherwise>
+                    B.cate = #{cate}
+                </otherwise>
+            </choose>
+            )
+        <include refid="search" />
+        ORDER BY bno DESC
+    </select>
+
+    <!-- cateName을 출력하기 위해 간단하게 조회 -->
+    <select id="getCateName" resultType="co.kr.gaepan.dto.board.BoardCateDTO">
+        SELECT DISTINCT
+            BC.*,
+            B.`group`
+        FROM gp_board_cate AS BC
+        JOIN gp_board AS B
+            ON BC.cate = B.cate
+        WHERE `group` = #{group}
+        ORDER BY cate ASC
+    </select>
+
+    <!-- cate에 따라 type 출력 -->
+    <select id="selectType" resultType="co.kr.gaepan.dto.board.BoardTypeDTO">
+        SELECT * FROM gp_board_type
+        WHERE `cate` = #{cate}
+        ORDER BY `type` ASC
+    </select>
+
+    <!-- board group만 추출 -->
+    <select id="findByGroup" resultType="co.kr.gaepan.dto.board.BoardDTO">
+        SELECT DISTINCT `group` FROM gp_board;
+    </select>
+
+
+</mapper>

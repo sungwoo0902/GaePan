@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{cs/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+
+
+
+<th:block layout:fragment="content">
+
+    <div class="container">
+        <section id="cs">
+            <br>
+            <br>
+            <div class="main" id="qnaList-main">
+                <div class="col-lg-3 col-md-5">
+                    <div class="sidebar">
+                        <div class="sidebar__item">
+                            <h4>공지사항</h4>
+                            <ul>
+                                <li><a th:href="@{/cs/notice/list(group='notice', cate=11)}">고객서비스</a></li>
+                                <li><a th:href="@{/cs/notice/list(group='notice', cate=12)}">반려동물</a></li>
+                                <li><a th:href="@{/cs/notice/list(group='notice', cate=13)}">제휴</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+               <section class="qna" id="qnaList-section">
+                            <div class="section-title product__discount__title">
+                                <h2><a th:href="@{/cs/notice/list(group=${pageResponseDTO.group}, cate=${pageResponseDTO.cate})}" class="btnTotal">[[${pageResponseDTO.dtoList[0].cateName}]]</a></h2>
+                            </div>
+                            <table class="table table-hover" id="qnaList-table">
+
+                                <tbody>
+                                <tr th:each="article:${pageResponseDTO.dtoList}">
+                                    <th scope="row">[[${article.typeName}]]</th>
+                                    <td><a th:href="@{/cs/notice/view(bno = ${article.bno})}">[[${article.title}]]</a></td>
+                                    <td>[[${#temporals.format(article.regDate, 'yyyy-MM-dd')}]]</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                   <div class="product__pagination" id="qnaList-page">
+                       <!-- 페이징 옮길때 group,cate 파라미터 받았던 값 그대로 사용 -->
+                       <span th:if="${pageResponseDTO.prev}"> <!-- span 태그는 기본 display:inline-block 나란히 -->
+                                        <a th:href="@{/cs/notice/list(group=${pageResponseDTO.group}, cate=${pageResponseDTO.cate}, pg=${pageResponseDTO.start - 1})}">
+                                           <i class="fa fa-long-arrow-left"></i>
+                                       </a>
+                               </span>
+
+                       <span th:each="num : ${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
+                                       <a th:href="@{/cs/notice/list(group=${pageResponseDTO.group}, cate=${pageResponseDTO.cate}, pg=${num})}">[[${num}]]</a> <!-- num 변수(페이지번호) 이렇게 반복하네 -->
+                               </span>
+
+                       <span th:if="${pageResponseDTO.next}">
+                                       <a th:href="@{/cs/notice/list(group=${pageResponseDTO.group}, cate=${pageResponseDTO.cate}, pg=${pageResponseDTO.end + 1})}">
+                                           <i class="fa fa-long-arrow-right"></i>
+                                       </a>
+                               </span>
+                   </div>
+
+               </section>
+            </div>
+
+
+
+             <!-- bootstrap 기존 설정은 안 건드리는 게 좋음(css 때문에) -->
+        </section>
+    </div>
+</th:block>
+
+</html>

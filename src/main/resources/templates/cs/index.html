@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{cs/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+
+
+
+<th:block layout:fragment="content">
+
+    <div class="container">
+        <section id="cs">
+
+
+            <div class="image-container">
+                <a class="index-atag" th:href="@{/cs/notice/list(group='notice', cate=11)}">
+                    <img src="../img/cs/이모티콘1.png" class="index-images" alt="...">
+                </a>
+                <a class="index-atag" th:href="@{/cs/notice/list(group='notice', cate=11)}">공지사항</a>
+            </div>
+
+            <div class="image-container">
+                <a class="index-atag" th:href="@{/cs/faq/list(group='faq', cate=21)}">
+                    <img src="../img/cs/이모티콘2.png" class="index-images" alt="...">
+                </a>
+                <a class="index-atag" th:href="@{/cs/faq/list(group='faq', cate=21)}">자주 묻는 질문</a>
+            </div>
+
+            <div class="image-container" id="image-container3">
+                <a class="index-atag" th:href="@{/cs/qna/list(group='qna', cate=31)}">
+                    <img src="../img/cs/이모티콘3.png" class="index-images" alt="...">
+                </a>
+                <a class="index-atag" th:href="@{/cs/qna/list(group='qna', cate=31)}">고객문의</a>
+            </div>
+
+
+
+
+
+
+
+            <div><a th:href="@{/cs/qna/write}"><button type="button" class="btn btn-primary" id="index-button">글쓰기</button></a></div> <!-- bootstrap 기존 설정은 안 건드리는 게 좋음(css 때문에) -->
+        </section>
+    </div>
+</th:block>
+
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<th:block layout:fragment="content">
+    <section id="admin_config_info" class="admin__section">
+        <nav>
+            <p class="admin__p">
+                <a th:href="@{/admin/index}">HOME</a> &gt; 게시판 &gt;
+                <th:block th:switch="${group}">
+                    <span th:case="notice"><strong>Notice</strong></span>
+                    <span th:case="faq"><strong>FAQ</strong></span>
+                    <span th:case="qna"><strong>QnA</strong></span>
+                </th:block>
+            </p>
+        </nav>
+
+        <article class="list">
+            <div class="admin_search_div">
+                <th:block th:switch="${group}">
+                    <span th:case="notice"><h3>공지사항</h3></span>
+                    <span th:case="faq"><h3>자주 묻는 질문</h3></span>
+                    <span th:case="qna"><h3>QnA</h3></span>
+                </th:block>
+            </div>
+
+            <div class="row">
+                <!-- 검색 -->
+                <dvi class="col-md-12">
+                    <form id="serachForm" class="row">
+                        <input type="hidden" name="group" th:value="${group}" />
+                        <input type="hidden" name="cate" th:value="${cate}" />
+                        <!-- 검색 카테고리 만들기 -->
+                        <div class="col-md-3">
+                            <select class="form-control" name="searchType">
+                                <!-- 검색할 때 옵션이  null이면 이거 선택 | 아니면 비워둠 -->
+                                <option th:selected="${pm.cri.searchType == null}" value="n">--------------------</option>
+                                <option th:selected="${pm.cri.searchType == 'total'}" value="total">전체</option>
+                                <option th:selected="${pm.cri.searchType == 'title'}" value="title">제목</option>
+                                <option th:selected="${pm.cri.searchType == 'content'}" value="content">내용</option>
+                                <option th:selected="${pm.cri.searchType == 'nick'}" value="nick">닉네임</option>
+                                <option th:selected="${pm.cri.searchType == 'tc'}" value="tc">제목 & 내용</option>
+                            </select>
+                        </div>
+                        <!-- 어떤 키워드로 검색할지 키워드 작성칸 -->
+                        <div class="col-md-4">
+                            <input class="form-control" type="text" name="keyword" th:value="${pm.cri.keyword}" />
+                        </div>
+                        <div class="col-md-2">
+                            <!-- 검색 버튼 -->
+                            <div>
+                                <input class="form-control searchBtn" type="submit" value="검색" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control" id="pageNumSelect" name="perPageNum">
+                                <option th:value="${pm.cri.perPageNum }">[[${pm.cri.perPageNum }]]개씩 보기</option>
+                                <option value="5">5개씩 보기</option>
+                                <option value="10">10개씩 보기</option>
+                                <option value="15">15개씩 보기</option>
+                            </select>
+                        </div>
+                    </form>
+                </dvi>
+                <!-- 카테고리 -->
+                <div class="col-md-12 mt-2">
+                    <ul class="pagination">
+                        <th:block th:each="cate : ${cateDTO}">
+                            <li class="board__cate">
+                                <!--TODO 이게 카테고리에 맞게 List 출력이 제대로 안되고 그냥 전부 출력함-->
+                                <a th:href="@{list(group=${group}, cate=${cate.cate}) }">
+                                    [[${cate.cateName}]]
+                                </a>
+                            </li>
+                        </th:block>
+                    </ul>
+                </div>
+            </div>
+
+            <form id="formCheck" th:action="@{write}" method="get">
+                <input class="board__group" type="hidden" name="group" th:value="${group}" th:data-group="${group}"  />
+                <input class="board__cate" type="hidden" name="cate" th:value="${cate}" />
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">
+                            <input type="checkbox" name="all" id="selectAll"/>
+                        </th>
+                        <th scope="col">번호</th>
+                        <th scope="col" class="tit">제목</th>
+                        <th scope="col">닉네임</th>
+                        <th scope="col">조회수</th>
+                        <th scope="col">등록일</th>
+                        <th scope="col">관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="board : ${adminBoardList}">
+                        <tr>
+                            <td class="chk">
+                                <input type="checkbox" name="chk" class="checkbox" th:value="${board.bno}">
+                            </td>
+                            <td class="bno" th:text="${board.rownum}"></td>
+                            <td class="tit">
+                                <div class="admin_title_board">
+                                    <a class="admin_title_board"
+                                       th:href="@{/admin/board/view(bno=${board.bno}, cate=${cate})}">
+                                        [<span th:text="${board.typeName}"></span>]
+                                        [[${board.title}]]
+                                    </a>
+                                    <th:block th:if="${board.commentCount > 0}">
+                                        <span class="board_comment">
+                                            <!-- todo 여기 링크 누르면 댓글창으로 바로 가게끔 설정 하고 싶음 -->
+                                            <a th:href="@{/admin/board/view(bno=${board.bno}, cate=${cate})}">
+                                                [<span th:text="${board.commentCount}"></span>]
+                                            </a>
+                                        </span>
+                                    </th:block>
+                                </div>
+                            </td>
+                            <td class="user admin__uid" th:text="${board.nick}"></td>
+                            <td class="hit">[[${board.hit}]]</td>
+                            <td class="regdate">
+                                <span class="date"
+                                      th:text="${#temporals.format(board.regDate, 'MM-dd')}">
+                                </span>
+                            </td>
+                            <td th:if="${currentNick eq board.nick and currentRole != 3 or currentRole==99}">
+                                <a th:href="@{/admin/board/modify(bno=${board.bno}, group=${group})}"
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <a href="#" th:data-bno="${board.bno}" th:data-cate="${cate}"
+                                   class="btn btn-sm btn-outline-danger board_deleteBtn">
+                                    <i class="fa fa-trash-o"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+                <th:block th:if="${currentRole == 99}">
+                    <input type="button" class="deleteBtn " value="선택삭제" />
+                </th:block>
+                <!-- todo 모든 글쓰기에서 role이 3이면 못쓰게 막아야함 -->
+                <th:block sec:authorize="isAuthenticated()" th:if="${currentRole != 3}">
+                    <input type="submit" class="primary-btn admin_btn board_write" value="글 쓰기" />
+                </th:block>
+            </form>
+
+            <!-- 페이징 -->
+            <div class="col-lg-12 mt-5">
+                <div class="product__pagination blog__pagination">
+                    <!-- 이전 페이지 -->
+                    <th:block th:if="${pm.prev}">
+                        <a th:href="@{'list?group=' + ${group} +'&cate=' +${cate} +'&'+ ${pm.makeQuery(pm.startPage-1)}}">
+                            <i class="fa fa-long-arrow-left"></i>
+                        </a>
+                    </th:block>
+                    <!-- 현재 페이지-->
+                    <th:block th:each="i : ${#numbers.sequence(pm.startPage, pm.endPage)}">
+                        <a th:class="${pm.cri.page == i} ? 'active' : ''"
+                           th:href="@{'list?group=' + ${group} +'&cate=' +${cate} +'&'+ ${pm.makeQuery(i)}}">[[${i}]]</a>
+                    </th:block>
+                    <!-- 다음 페이지 -->
+                    <th:block th:if="${pm.next}">
+                        <a th:href="@{'list?group=' + ${group} +'&cate=' +${cate} +'&'+ ${pm.makeQuery(pm.endPage+1)}}">
+                            <i class="fa fa-long-arrow-right"></i>
+                        </a>
+                    </th:block>
+                </div>
+            </div>
+        </article>
+    </section>
+</th:block>
+</html>
+<script th:src="@{/js/admin/boardDelete.js}"></script>

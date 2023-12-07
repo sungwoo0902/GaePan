@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{my/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<th:block layout:fragment="content">
+    <main>
+        <div id="my">
+            <div class="ordered">
+                <ul>
+                    <span class="menu_else"></span>
+                    <li><a th:href="@{/my/applylist}">전체신청내역</a></li>
+                    <li><a th:href="@{/my/diary}">입양일기</a></li>
+                    <li><a th:href="@{/my/qna}">나의Q&A</a></li>
+                    <li><a th:href="@{/my/support}">후원하기</a></li>
+                    <li><a th:href="@{/my/infoCheck}">개인정보설정</a></li>
+                    <li><a th:href="@{/pet/register}">아이 등록</a></li>
+                </ul>
+                <section>
+                    <article>
+                        <h3>전체신청내역</h3>
+                        <table border="0">
+                            <tr>
+                                <th>날짜</th>
+                                <th>동물정보</th>
+                                <th>상태</th>
+                            </tr>
+                            <tr th:each="list : ${applyList}" th:if="${list.uid != null}">
+                                <td class="date" th:text="${#temporals.format(list.regDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                                <td>
+                                    <a th:href="@{/pet/details(no=${list.petNo})}" class="thumb">
+                                        <img th:if="${list.thumb ne null}" th:src="@{/upload/}+${list.thumb}" style="max-width: 50%;">
+                                    </a>
+                                    <ul>
+                                        <li class="prodName" th:text="${list.name}">
+                                            동물명<a th:href="@{/pet/details(no=${list.petNo})}"></a>
+                                        </li>
+                                        <li class="a_no" th:text="${list.petNo}">동물등록번호</li>
+                                    </ul>
+                                </td>
+                                <td class="status" th:switch="${list.status}">
+                                    <span th:case="1" style="color: blue;">접수 완료</span>
+                                    <span th:case="2" style="color: red;">반려됨</span>
+                                    <span th:case="3" style="color: green;">대기중</span>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="page" th:if="${total} != 0" style="">
+                            <span class="prev" th:if="${pageGroupStart > 1}">
+                                <a th:href="@{/my/applylist(pg=${pageGroupStart - 1})}"><&nbsp;이전</a>
+                            </span>
+                            <span class="num">
+                                <th:block th:each="i : ${#numbers.sequence(pageGroupStart, pageGroupEnd)}">
+                                    <a th:href="@{/my/applylist(pg=${i})}" th:classappend="${currentPage == i} ? 'current' : 'off'">
+                                        [[${i}]]
+                                    </a>
+                                </th:block>
+                            </span>
+                            <span class="next" th:if="${pageGroupEnd < lastPageNum}">
+                                <a th:href="@{/my/applylist(pg=${pageGroupEnd + 1})}">다음&nbsp;></a>
+                            </span>
+                        </div>
+                    </article>
+                </section>
+            </div>
+        </div>
+    </main>
+</th:block>
+</html>

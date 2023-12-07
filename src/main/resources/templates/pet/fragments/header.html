@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org/"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<body>
+<!-- Header Begin -->
+<header th:fragment="header">
+    <div class="header__top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="header__top__left">
+                        <ul>
+                            <li>
+                                <i class="fa fa-envelope"></i>
+                                GaePan@gaepan.com
+                            </li>
+                            <li>후원자를 찾습니다.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="header__top__right">
+                        <!-- 로그인 되었을 경우 -->
+                        <th:block sec:authorize="isAuthenticated()">
+                            <div class="header__top__right__social">
+                                <span class="gp_uid">[[${#authentication.principal.member.nick}]]</span>
+                                <a th:href="@{/admin/index}">admin</a>
+                                <a th:href="@{/my/index}">마이페이지</a>
+                            </div>
+                            <a th:href="@{/member/logout}">로그아웃</a>
+                        </th:block>
+
+                        <!-- 로그인 상관없이 보여줌 -->
+                        <th:block sec:authorize="isAnonymous()">
+                            <div class="header__top__right__social">
+                                <a th:href="@{/admin/index}">admin</a>
+                                <a th:href="@{/my/index}">마이페이지</a>
+                            </div>
+                            <div class="header__top__right__auth">
+                                <a th:href="@{/member/login}">
+                                    <i class="fa fa-user"></i> Login
+                                </a>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 여기서부터 header category -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="header__logo">
+                    <a th:href="@{/index}"><img th:src="@{/img/logo.png}" alt=""></a>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <nav class="header__menu" style="margin-top: 10px">
+                    <ul>
+                        <!--li태그에 class="active"가 내나 해당 카테고리 보고 있는 중인거 표시 -->
+                        <li class="active">
+                            <a th:href="@{/index}">GaePan 소개</a>
+                        </li>
+                        <li>
+                            <a href="#">분양</a>
+                            <ul class="header__menu__dropdown text-left">
+                                <li>
+                                    <a th:href="@{/pet/petlist}">분양 목록</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/pet/adoptdiary}">분양 일기</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a th:href="@{/pet/missinglist}">제보</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/cs/index}">문의하기</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="humberger__open">
+                <i class="fa fa-bars"></i>
+            </div>
+
+        </div>
+</header>
+<!-- Header Section End -->
+</html>

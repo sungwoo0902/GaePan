@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<th:block layout:fragment="content">
+    <section id="admin_config_info" class="admin__section">
+        <nav>
+            <h3>환경설정</h3>
+            <p class="admin__p">
+                <a th:href="@{/admin/index}">HOME</a> &gt; 환경설정 &gt;
+                <strong>기본환경정보</strong>
+            </p>
+        </nav>
+
+        <article class="admin__article">
+            <form action="#">
+                <section>
+                    <h4>기본정보</h4>
+                    <p>
+                        기본정보는 반드시 입력해야 합니다.
+                    </p>
+                    <table>
+                        <tr>
+                            <td>사이트 명</td>
+                            <td>GaePan</td>
+                        </tr>
+                        <tr>
+                            <td>부제</td>
+                            <td>반려동물 사이트</td>
+                        </tr>
+                        <tr>
+                            <td>버전</td>
+                            <td>v1.0.0</td>
+                        </tr>
+                    </table>
+                </section> <!-- 기본정보 end -->
+
+                <section class="mt-5">
+                    <h4>이용약관</h4>
+                    <p>
+                        이용약관 내용입니다.
+                    </p>
+                    <table>
+                        <tr>
+                            <td>위치정보 이용약관</td>
+                            <td><textarea>약관1</textarea></td>
+                        </tr>
+                        <tr>
+                            <td>개인정보처리방침</td>
+                            <td><textarea>약관2</textarea></td>
+                        </tr>
+                    </table>
+                </section> <!-- 이용약관 end-->
+            </form> <!-- 기본정보 및 이용약관 form end -->
+        </article>
+
+    </section>
+</th:block>
+</html>

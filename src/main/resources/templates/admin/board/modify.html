@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<th:block layout:fragment="content">
+    <section id="admin_config_info" class="admin__section">
+        <article class="write">
+            <form action="modify" method="post">
+                <!--<input type="hidden" name="uid" th:vale="${#authentication.principal.member.uid}" />-->
+                <input type="hidden" name="bno" th:value="${boardDTO.bno}" />
+                <table>
+                    <!-- group / cate / type 설정 -->
+                    <div class="row group_cate">
+                        <div class="col-md-4">
+                            <select id="boardGroup" class="form-control" name="group">
+                                <option value="null">게시판 선택</option>
+                                <option th:selected="${boardDTO.group} eq 'notice'" value="notice">공지사항</option>
+                                <option th:selected="${boardDTO.group} eq 'faq'" value="faq">FAQ</option>
+                                <option th:selected="${boardDTO.group} eq 'qna'" value="qna">QnA</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="cate" class="form-control" name="cate">
+                                <option disabled required th:value="${boardDTO.cate}" th:text="${boardDTO.cateName}"></option>
+                                <option required th:each="cate : ${cateDTO}" th:value="${cate.cate}" th:text="${cate.cateName}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="type" class="form-control" name="type">
+                                <option selected disabled required th:value="${boardDTO.type}" th:text="${boardDTO.typeName}"></option>
+                                <option required th:each="type : ${typeDTO}" th:value="${type.type}" th:text="${type.typeName}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <tr>
+                        <td>제목</td>
+                        <td>
+                            <input type="text" name="title" required th:value="${boardDTO.title}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>작성자</td>
+                        <td>
+                            <input type="text" name="nick" th:value="${currentNick}" readonly />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>내용</td>
+                        <td>
+                            <textarea name="content" required>[[${boardDTO.content}]]</textarea>
+                        </td>
+                    </tr>
+                </table>
+                <th:block sec:authorize="isAuthenticated()" th:if="${currentRole != 3}">
+                    <div class="write__div">
+                        <input type="button" class="btnBack" value="취소하기">
+                        <input type="submit" class="btnSubmit" value="수정하기">
+                    </div>
+                </th:block>
+            </form>
+        </article>
+    </section>
+</th:block>
+</html>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="co.kr.gaepan.mapper.pet.PetListMapper">
+
+    <select id="mainmissinglist" resultType="co.kr.gaepan.dto.pet.PetRegisterDTO">
+
+        SELECT
+            a.*,
+            b.tName
+        FROM gp_pet AS a
+        JOIN gp_pet_type AS b
+        ON a.type = b.type
+        WHERE division = 2 ORDER BY `no` DESC LIMIT 10;
+
+    </select>
+
+    <select id="mainpetdoglist" resultType="co.kr.gaepan.dto.pet.PetRegisterDTO">
+
+        SELECT
+            a.*,
+            b.tName
+        FROM gp_pet AS a
+                 JOIN gp_pet_type AS b
+                      ON a.`type` = b.`type`
+        WHERE a.cate= 1 AND division = 1
+        ORDER BY `no` DESC
+        LIMIT 8;
+
+    </select>
+
+    <select id="mainpetcatlist" resultType="co.kr.gaepan.dto.pet.PetRegisterDTO">
+
+        SELECT
+            a.*,
+            b.tName
+        FROM gp_pet AS a
+                 JOIN gp_pet_type AS b
+                      ON a.`type` = b.`type`
+        WHERE a.cate= 2 AND division = 1
+        ORDER BY `no` DESC
+        LIMIT 8;
+
+    </select>
+
+    <select id="mainpetetclist" resultType="co.kr.gaepan.dto.pet.PetRegisterDTO">
+
+        SELECT
+            a.*,
+            b.tName
+        FROM gp_pet AS a
+                 JOIN gp_pet_type AS b
+                      ON a.`type` = b.`type`
+        WHERE a.cate= 3 AND division = 1
+        ORDER BY `no` DESC
+        LIMIT 8;
+
+    </select>
+
+    <select id="petcategory" resultType="co.kr.gaepan.dto.pet.PetCateDTO">
+
+        SELECT * FROM gp_pet_cate
+
+    </select>
+    <select id="petType" resultType="co.kr.gaepan.dto.pet.PetTypeDTO">
+
+        SELECT * FROM gp_pet_type WHERE cate= #{cate};
+
+    </select>
+
+    <select id="pet" resultType="co.kr.gaepan.dto.pet.PetRegisterDTO">
+
+        SELECT * FROM gp_pet WHERE `no`= #{no};
+
+    </select>
+
+    <select id="searchPets" resultType="co.kr.gaepan.dto.pet.PetRegisterDTO">
+        SELECT DISTINCT
+            a.*,
+            b.tName,
+            c.cName
+        FROM gp_pet as a
+        LEFT JOIN gp_pet_type as b ON a.`type` = b.`type`
+        LEFT JOIN gp_pet_cate as c ON a.cate = c.cate
+        WHERE
+        <if test="searchType == 'tName'">
+            b.tName LIKE CONCAT('%', #{key}, '%') AND a.division = #{division}
+        </if>
+        <if test="searchType == 'cName'">
+            c.cName LIKE CONCAT('%', #{key}, '%') AND a.division = #{division}
+        </if>
+        <if test="searchType == 'name'">
+            a.name LIKE CONCAT('%', #{key}, '%') AND a.division = #{division}
+        </if>
+        ORDER BY `no` DESC
+        LIMIT #{startNum}, 10;
+
+    </select>
+
+    <select id="searchPetsCount" resultType="int">
+        SELECT count(*)
+        FROM gp_pet as a
+        LEFT JOIN gp_pet_type as b ON a.`type` = b.`type`
+        LEFT JOIN gp_pet_cate as c ON a.cate = c.cate
+        WHERE
+        <if test="searchType == 'tName'">
+            b.tName LIKE CONCAT('%', #{key}, '%') AND a.division = #{division}
+        </if>
+        <if test="searchType == 'cName'">
+            c.cName LIKE CONCAT('%', #{key}, '%') AND a.division = #{division}
+        </if>
+        <if test="searchType == 'name'">
+            a.name LIKE CONCAT('%', #{key}, '%') AND a.division = #{division}
+        </if>
+    </select>
+
+</mapper>

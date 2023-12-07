@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="co.kr.gaepan.mapper.admin.AdminPetMapper">
+
+    <select id="AdminPet" resultType="co.kr.gaepan.dto.pet.PetRegisterDTO">
+
+        SELECT
+            a.*,
+            b.tName,
+            c.cName
+        FROM gp_pet as a
+        LEFT JOIN gp_pet_type as b ON a.`type` = b.`type`
+        LEFT JOIN gp_pet_cate as c ON a.cate = c.cate
+        WHERE division = 1
+        LIMIT #{startNum}, 10
+
+    </select>
+
+    <select id="AdminAdopt" resultType="co.kr.gaepan.dto.pet.PetRegisterDTO">
+
+        SELECT
+            a.*,
+            b.tName,
+            c.cName
+        FROM gp_pet as a
+        LEFT JOIN gp_pet_type as b ON a.`type` = b.`type`
+        LEFT JOIN gp_pet_cate as c ON a.cate = c.cate
+        WHERE division = 3
+        LIMIT #{startNum}, 10
+
+    </select>
+
+    <select id="AdminMissing" resultType="co.kr.gaepan.dto.pet.PetRegisterDTO">
+
+        SELECT
+            a.*,
+            b.tName,
+            c.cName
+        FROM gp_pet as a
+        LEFT JOIN gp_pet_type as b ON a.`type` = b.`type`
+        LEFT JOIN gp_pet_cate as c ON a.cate = c.cate
+        WHERE division = 2
+        LIMIT #{startNum}, 10
+
+    </select>
+
+    <select id="searchPetsCount" resultType="int">
+        SELECT count(*)
+        FROM gp_pet as a
+        LEFT JOIN gp_pet_type as b ON a.`type` = b.`type`
+        LEFT JOIN gp_pet_cate as c ON a.cate = c.cate
+        WHERE division = 1
+    </select>
+
+    <select id="searchMissingCount" resultType="int">
+        SELECT count(*)
+        FROM gp_pet as a
+        LEFT JOIN gp_pet_type as b ON a.`type` = b.`type`
+        LEFT JOIN gp_pet_cate as c ON a.cate = c.cate
+        WHERE division = 2
+    </select>
+
+    <select id="searchAdoptCount" resultType="int">
+        SELECT count(*)
+        FROM gp_pet as a
+        LEFT JOIN gp_pet_type as b ON a.`type` = b.`type`
+        LEFT JOIN gp_pet_cate as c ON a.cate = c.cate
+        WHERE division = 3
+    </select>
+
+</mapper>

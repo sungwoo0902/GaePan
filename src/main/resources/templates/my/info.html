@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{my/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<th:block th:if="${myInfoDTO != null }" layout:fragment="content">
+    <main>
+        <form th:action="@{/my/info}" method="post" th:object="${myInfoDTO}" onsubmit="return validateForm()">
+
+        <div id="my">
+            <div class="info">
+                <ul>
+                    <span class="menu_else"></span>
+                    <li><a th:href="@{/my/applylist}">전체신청내역</a></li>
+                    <li><a th:href="@{/my/diary}">입양일기</a></li>
+                    <li><a th:href="@{/my/qna}">나의Q&A</a></li>
+                    <li><a th:href="@{/my/support}">후원하기</a></li>
+                    <li><a th:href="@{/my/infoCheck}">개인정보설정</a></li>
+                    <li><a th:href="@{/pet/register}">아이 등록</a></li>
+                </ul>
+                <section>
+                    <article>
+                        <h3>회원정보 설정</h3>
+                            <table border="0">
+                                <tr>
+                                    <td>사용자 ID</td>
+                                    <td>
+                                        <input id="userId" th:value="${myInfoDTO.uid}" readonly style="border: none">
+                                        <input type="hidden" name="uid" th:value="${myInfoDTO.uid}" readonly style="border: none">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>비밀번호</td>
+                                    <td>
+                                        <a th:href="@{/my/passchange}" id="btnChangePass">비밀번호변경</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>이름</td>
+                                    <td>
+                                        <input name="name" id="userName" th:value="${myInfoDTO.name}" style="width: 130px; height: 23px"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>닉네임</td>
+                                    <td>
+                                        <input name="nick" th:value="${myInfoDTO.nick}" style="width: 130px; height: 23px">
+                                        <button type="button" onclick="validateNick()">닉네임 중복 확인</button>
+                                        <div class="error-message" id="nickError" style="display: none;">이미 사용 중인 닉네임입니다.</div>
+                                        <div class="success-message" id="nickSuccess" style="display: none;">사용 가능한 닉네임입니다.</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>생년월일</td>
+                                    <td>
+                                        <input name="birth" id="userBirth" th:value="${myInfoDTO.birth}" readonly style="border: none"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>E-mail</td>
+                                    <td>
+                                        <input name="email1" id="email1" th:value="${myInfoDTO.email.substring(0, myInfoDTO.email.indexOf('@'))}" style="width: 130px; height: 23px">
+                                        @
+                                        <input name="email2" id="email2" th:value="${myInfoDTO.email.substring(myInfoDTO.email.indexOf('@') + 1)}" style="width: 130px; height: 23px">
+                                        <button type="button" onclick="validateEmail()">이메일 중복 확인</button><br><br>
+                                        <button type="button" onclick="toggleEmailVerification()">이메일 인증번호 받기</button><br><br>
+                                        <!-- 새로운 입력 칸 -->
+                                        <div id="emailVerification" style="display: none;">
+                                            <input type="text" id="verificationCode" name="verificationCode" style="width: 130px; height: 23px" placeholder="인증번호 입력">
+                                        </div>
+                                        <div class="error-message" id="emailError" style="display: none;">이미 사용 중인 이메일입니다.</div>
+                                        <div class="success-message" id="emailSuccess" style="display: none;">사용 가능한 이메일입니다.</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>휴대폰</td>
+                                    <td>
+                                        <p class="hp">
+                                            <input name="hp1" th:value="${myInfoDTO.hp.substring(0, 3)}" style="width: 130px; height: 23px"/>-
+                                            <input name="hp2" th:value="${myInfoDTO.hp.substring(4, 8)}" style="width: 130px; height: 23px"/>-
+                                            <input name="hp3" th:value="${myInfoDTO.hp.substring(9)}" style="width: 130px; height: 23px"/>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>주소</td>
+                                    <td>
+                                        <input id="zip" name="zip" th:value="${myInfoDTO.zip}" style="width: 130px; height: 23px; margin-bottom: 1px"/>
+                                        <button type="button" onclick="zipcode()" >주소검색</button>
+                                        <p class="address">
+                                            <input id="addr1" name="addr1" th:value="${myInfoDTO.addr1}" style="width: 300px; height: 25px; margin-bottom: 2px"/>
+                                            <input id="addr2" name="addr2" th:value="${myInfoDTO.addr2}" style="width: 300px; height: 25px"/>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>양육경력</td>
+                                    <td style="font-size: 15px">
+                                        <input type="radio" name="exp" th:value="${myInfoDTO.exp}" th:checked="${myInfoDTO.exp == 'Y'}"> 있음&nbsp;
+                                        <input type="radio" name="exp" th:value="${myInfoDTO.exp}" th:checked="${myInfoDTO.exp == 'N'}"> 없음
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>입양횟수</td>
+                                    <td>
+                                        <input type="text" name="count" th:value="${myInfoDTO.count}" style="width: 130px; height: 23px"> 회
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>회원탈퇴</td>
+                                    <td>
+                                        <a th:href="@{/my/passcheck}" id="btnWithdraw">탈퇴하기</a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <button type="submit" id="btnInfoChange" th:with="uid=${myInfoDTO.uid}">수정하기</button>
+                    </article>
+                </section>
+            </div>
+        </div>
+        </form>
+    </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="/js/my/passCheck.js"></script>
+    <script src="/js/my/myInfo.js"></script>
+    <script src="/js/my/findzip.js"></script>
+    <script th:inline="javascript">
+        function validateName() {
+            var nameValue = $('input[name="name"]').val();
+            var nameRegex = /^[가-힣]{2,10}$/;
+
+            if (!nameRegex.test(nameValue)) {
+                alert('이름은 2~10자 사이의 한글만 입력 가능합니다.');
+                return false;
+            }
+            return true;
+        }
+
+        function validateEmail() {
+            var email1Value = $('input[name="email1"]').val();
+            var email2Value = $('input[name="email2"]').val();
+            var emailValue = email1Value + '@' + email2Value;
+            var emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+
+            $.ajax({
+                type: 'GET',
+                url: '/my/check/email/' + emailValue,
+                success: function (result) {
+                    if (result) {
+                        // 중복된 이메일일 경우 에러 메시지 표시, 성공 메시지 감추기
+                        $('#emailError').show();
+                        $('#emailSuccess').hide();
+                    } else {
+                        // 중복이 아닌 경우 에러 메시지 감추기, 성공 메시지 표시
+                        $('#emailError').hide();
+                        $('#emailSuccess').show();
+                    }
+                },
+                error: function () {
+                    console.error('Error validating email');
+                    // 에러가 발생 했을 경우 에러 메시지 표시, 성공 메시지 감추기
+                    $('#emailError').show();
+                    $('#emailSuccess').hide();
+                }
+            });
+        }
+    </script>
+    <script>
+        function validateNick() {
+            var nickValue = $('input[name="nick"]').val();
+            $.ajax({
+                type: 'GET',
+                url: '/my/check/nick/' + nickValue,
+                success: function (result) {
+                    if (result) {
+                        // 중복된 닉네임일 경우 에러 메시지 표시, 성공 메시지 감추기
+                        $('#nickError').show();
+                        $('#nickSuccess').hide();
+                    } else {
+                        // 중복이 아닌 경우 에러 메시지 감추기, 성공 메시지 표시
+                        $('#nickError').hide();
+                        $('#nickSuccess').show();
+                    }
+                },
+                error: function () {
+                    console.error('Error validating nick');
+                    // 에러가 발생했을 경우 에러 메시지 표시, 성공 메시지 감추기
+                    $('#nickError').show();
+                    $('#nickSuccess').hide();
+                }
+            });
+        }
+    </script>
+    <script th:inline="javascript">
+        function toggleEmailVerification() {
+            var emailVerification = document.getElementById('emailVerification');
+            emailVerification.style.display = (emailVerification.style.display === 'none' || emailVerification.style.display === '') ? 'block' : 'none';
+        }
+    </script>
+    <script>
+        function validateForm() {
+            return validateName() && validateEmail();
+        }
+    </script>
+</th:block>
+</html>

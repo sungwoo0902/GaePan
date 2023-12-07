@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="co.kr.gaepan.mapper.admin.MybatisAdminCommentMapper">
+
+    <!-- 댓글 조회 -->
+    <select id="findComments" parameterType="co.kr.gaepan.dto.admin.GP_AdminBoardDTO">
+        SELECT
+            b.*,
+            c.bno AS cbno,
+            m.nick,
+            c.comment AS cComment,
+            c.regDate AS cRegDate
+        FROM gp_board AS b
+        LEFT JOIN gp_board AS c
+            ON b.bno = c.parent
+        JOIN gp_member AS m
+            ON c.uid = m.uid
+        WHERE b.bno = #{bno}
+    </select>
+
+    <!-- 댓글 작성-->
+   <insert id="saveComment" parameterType="co.kr.gaepan.dto.admin.GP_AdminBoardDTO">
+       INSERT INTO gp_board SET
+           uid = #{uid},
+           `group` = #{group},
+           cate = #{cate},
+           `type`= #{type},
+           `comment` = #{comment},
+            regIP = #{regIP},
+            parent = #{bno}
+   </insert>
+
+    <!-- 댓글 개수-->
+    <select id="countComments">
+        SELECT
+            COUNT(*)
+        FROM gp_board AS b
+        LEFT JOIN gp_board AS c
+            ON b.bno = c.parent
+        JOIN gp_member AS m
+            ON c.uid = m.uid
+        WHERE c.parent = #{bno}
+    </select>
+
+    <!-- 댓글 수정 -->
+    <update id="modifyComment">
+        UPDATE gp_board SET
+        `comment` = #{comment}
+        WHERE bno = #{bno}
+    </update>
+
+    <!-- 댓글 삭제 -->
+    <delete id="deleteComment">
+        DELETE FROM gp_board
+        WHERE bno = #{bno}
+    </delete>
+</mapper>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<th:block layout:fragment="content">
+    <section id="admin_config_info" class="admin__section">
+
+        <article class="view">
+            <table class="csInputTable csViewTable">
+                <tr>
+                    <td>제목</td>
+                    <td>
+                        <div>
+                            [<span th:text="${boardDTO.typeName}"></span>]
+                            [[${boardDTO.title}]]
+                            <span class="date" style="float: right;"
+                               th:text="${#temporals.format(boardDTO.regDate, 'yy-MM-dd')}">
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>작성자</td>
+                    <td class="admin__uid" th:text="${boardDTO.nick}"></td>
+                </tr>
+                <tr>
+                    <td>내용</td>
+                    <td class="content mt-3 mb-5">
+                        <textarea>[[${boardDTO.content}]]</textarea>
+                    </td>
+                </tr>
+            </table>
+            <th:block th:if="${currentNick eq boardDTO.nick and currentRole != 3}">
+                <div class="admin_board_right">
+                    <a th:href="@{/admin/board/modify(bno=${boardDTO.bno}, group=${boardDTO.group})}"
+                       class="">게시글 수정</a>
+                    <a href="#" class="board_deleteBtn" th:data-bno="${boardDTO.bno}">게시글 삭제</a>
+                    <input class="board__group" type="hidden" name="group" th:value="${boardDTO.group}" th:data-group="${boardDTO.group}" />
+                </div>
+            </th:block>
+
+            <section class="commentList">
+                <article class="comments">
+                    <span>댓글 📝</span>
+                    <th:block th:each="comment : ${comments}">
+                        <!-- todo 여기도 이 조건이 아닌데 일단 이렇게 해둠 -->
+                        <div th:if="${comment.comment == null}">
+                            <div class="comment">
+                                <span th:text="${comment.nick}"></span>
+                                <span class="date"
+                                      th:text="${#temporals.format(comment.CRegDate, 'yy-MM-dd')}">
+                                </span>
+                                <textarea class="commentArea" name="comment" th:text="${comment.CComment}"
+                                          th:data-cComment="${comment.CComment}" readonly></textarea>
+                            </div>
+                            <th:block th:if="${currentNick eq comment.nick and currentRole != 3 or currentRole==99}">
+                                <div class="admin_board_left commentClick">
+                                    <a href="#" class="comment__modify" th:data-comment="${comment.CComment}"
+                                       th:data-cbno="${comment.cbno}" th:data-parent="${comment.bno}">댓글 수정</a>
+                                    <a href="#" class="comment__delete" th:data-cate="${comment.cate}"
+                                       th:data-cbno="${comment.cbno}" th:data-parent="${comment.bno}">댓글 삭제</a>
+
+                                    <a href="#" class="modifyCancel">작성 취소</a>
+                                    <a href="#" class="modifyComplete" th:data-cate="${cate}"
+                                       th:data-parent="${comment.bno}" th:data-cbno="${comment.cbno}">수정 완료</a>
+                                </div>
+                            </th:block>
+                        </div>
+<!--                        <div th:unless="${comment.comment == null}">
+                            <p class="empty">등록된 댓글이 없습니다.</p>
+                        </div>-->
+                    </th:block>
+
+                    <form th:action="@{/admin/board/commentWrite}" method="post">
+                        <input type="hidden" name="bno" th:value="${boardDTO.bno}" />
+                        <input type="hidden" name="uid" th:value="${currentUid}" />
+                        <input type="hidden" name="group" th:value="${boardDTO.group}" />
+                        <input type="hidden" name="cate" th:value="${cate}" />
+                        <input type="hidden" name="type" th:value="${boardDTO.type}" />
+
+                        <th:block sec:authorize="isAuthenticated()" th:if="${currentRole != 3}" >
+                            <div class="mt-5">
+                                <textarea name="comment"></textarea>
+                                <div class="admin_board_right">
+                                    <input type="reset" class="btnReset" value="취소" />
+                                    <input type="submit" class="" value="댓글 작성">
+                                </div>
+                            </div>
+                        </th:block>
+                    </form>
+                </article>
+            </section>
+            <div class="boardList">
+                <a th:href="@{/admin/board/list(group=${boardDTO.group}, cate=${cate})}" class="btnList">목록보기</a>
+            </div>
+        </article>
+    </section>
+</th:block>
+</html>
+<script th:src="@{/js/admin/boardComment.js}"></script>
+<script th:src="@{/js/admin/boardDelete.js}"></script>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="co.kr.gaepan.mapper.my.MyInfoMapper">
+
+    <select id="selectInfo" resultType="co.kr.gaepan.dto.my.MyInfoDTO">
+        SELECT * FROM `gp_member` WHERE `uid` = #{uid}
+    </select>
+    <update id="updateInfo" >
+        UPDATE `gp_member` SET
+        `name` = #{name},
+        `nick` = #{nick},
+        `email` = CONCAT(#{email1}, '@', #{email2}),
+        `hp` = CONCAT(#{hp1}, '-', #{hp2}, '-', #{hp3}),
+        `zip` = #{zip},
+        `addr1` = #{addr1},
+        `addr2` = #{addr2},
+        `exp` = #{exp},
+        `count` = #{count}
+        WHERE `uid` = #{uid}
+    </update>
+
+
+    <update id="updatePassword" parameterType="co.kr.gaepan.dto.my.MyInfoDTO">
+        UPDATE `gp_member`
+        SET `pw` = #{newPw}
+        WHERE `uid` = #{uid}
+    </update>
+
+    <update id="deleteInfo">
+        UPDATE
+            `gp_member`
+        SET
+            `name` = NULL,
+            `pw` = '  ',
+            `gender` = 0,
+            `hp` = NULL,
+            `email` = NULL,
+            `birth` =NULL,
+            `role` = 4,
+            `zip` = 0,
+            `addr1` = ' ',
+            `addr2` = ' ',
+            `exp` = NULL,
+            `count` = 0,
+            `levDate` = NOW()
+        WHERE `uid` = #{uid}
+    </update>
+
+    <!-- 닉네임 중복 확인을 위한 쿼리 -->
+    <select id="countByNick" resultType="int" parameterType="string">
+        SELECT COUNT(*) FROM `gp_member` WHERE nick = #{nick}
+    </select>
+
+    <!-- 이메일 중복 확인을 위한 쿼리 -->
+    <select id="countByEmail" resultType="int" parameterType="string">
+        SELECT COUNT(*) FROM `gp_member` WHERE email = #{email}
+    </select>
+</mapper>

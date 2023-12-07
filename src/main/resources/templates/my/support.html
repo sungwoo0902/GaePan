@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{my/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<th:block layout:fragment="content">
+    <main>
+        <div id="my">
+            <div class="home">
+                <ul>
+                    <span class="menu_else"></span>
+                    <li><a th:href="@{/my/applylist}">전체신청내역</a></li>
+                    <li><a th:href="@{/my/diary}">입양일기</a></li>
+                    <li><a th:href="@{/my/qna}">나의Q&A</a></li>
+                    <li><a th:href="@{/my/support}">후원하기</a></li>
+                    <li><a th:href="@{/my/infoCheck}">개인정보설정</a></li>
+                    <li><a th:href="@{/pet/register}">아이 등록</a></li>
+                </ul>
+                <section>
+                    <article>
+                        <h3 style="font-size: 30px">후원하기</h3>
+                        <!-- 정기 후원 -->
+                        <div>
+                            <a href="#">
+                                <img th:src="@{/img/my/support.png}" alt="Support Image">
+                            </a>
+                        </div>
+                        <br>
+                        <div style="border: 1px">
+                            <h4 style="text-align: center">일시 후원 </h4><br>
+                            <h5 style="text-align: center">계좌이체를 통하여 후원금을 납부하시는 일시후원 방법입니다.</h5><br>
+                            <h5 style="text-align: center">국민은행 1234567 - 89 - 101112&nbsp;(예금주 : GaePan)</h5><br>
+                            <table>
+                                <li style="font-size: 15px; width: 120%; color: #8972ee">개인은 연급여의 30% 이내에 해당하는 기부금액은 전액 소득공제를 받으실 수 있습니다.</li>
+                                <li style="font-size: 15px; width: 120%; color: #8972ee">법인(기업)의 기부금은 법인세법 제 24조 규정에 의해 손금을 인정 받을 수 있습니다.</li>
+                                <li style="font-size: 15px; width: 120%; color: #8972ee">계좌입금 시 기부금영수증 발행을 위해 '후원Q&A' 1대1 문의로 입금자명,<br>&nbsp;&nbsp;&nbsp; 입금일시, 금액, 전화번호를 남겨주시면 안내드립니다.</li>
+                            </table>
+                        </div>
+                    </article>
+                </section>
+            </div>
+        </div>
+    </main>
+</th:block>
+</html>

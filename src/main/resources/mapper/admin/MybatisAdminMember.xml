@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="co.kr.gaepan.mapper.admin.MybatisAdminMemberMapper">
+
+    <!-- 검색 쿼리 -->
+    <sql id="search">
+        <if test='searchType != null and !searchType.equals("") and searchType != "n" '>
+            WHERE ${searchType} LIKE CONCAT('%',#{keyword},'%')
+        </if>
+    </sql>
+
+    <select id="searchList" resultType="co.kr.gaepan.dto.member.MemberDTO">
+        SELECT
+            @rownum := @rownum + 1 AS rownum,
+            m.*
+        FROM gp_member as m
+            ,(SELECT @rownum := 0) AS R
+        <include refid="search" />
+        ORDER BY rownum DESC
+        LIMIT #{startRow}, #{perPageNum}
+    </select>
+
+    <select id = "searchListCount" parameterType="co.kr.gaepan.util.SearchCriteria"
+            resultType="int">
+        SELECT
+            count(*)
+        FROM gp_member
+            ,(SELECT @rownum := 0) AS R
+        <include refid="search" />
+    </select>
+
+
+    <!-- black List 출력 -->
+    <select id="blackList" resultType="co.kr.gaepan.dto.member.MemberDTO">
+        SELECT
+            @rownum := @rownum + 1 AS rownum,
+            m.*
+        FROM gp_member AS m
+        ,(SELECT @rownum := 0) AS R
+        WHERE role IN(2,3)
+        ORDER BY rownum DESC
+        LIMIT #{cri.startRow}, #{cri.perPageNum}
+    </select>
+
+    <select id = "blackListCount" parameterType="co.kr.gaepan.util.SearchCriteria"
+            resultType="int">
+        SELECT
+            count(*)
+        FROM gp_member
+        WHERE role IN(2,3)
+        ORDER BY `no` DESC
+    </select>
+
+
+
+    <!-- blckList 등록
+        foreach : List를 반복하기 위해서 mybatis 제공
+        collection : 내가 매개변수로 사용할 이름
+        open : ()를 열어 주는 친구
+        separator : List를 반복하기 떄문에 ,를 통해 구분해줌
+        close : ()를 닫아 주는 친구
+    -->
+    <update id="blackMember">
+        UPDATE gp_member SET
+        `role` = 3,
+        levDate = NOW()
+        WHERE `no` in
+        <foreach item="member" index="index" collection="memberDTOList"
+                 open="(" separator="," close=")">
+            #{member.no}
+        </foreach>
+    </update>
+
+    <!-- 블랙리스트 해제 -->
+    <update id="blackMemberRemove">
+        UPDATE gp_member SET
+        role = 2,
+        levDate = NOW()
+        WHERE `no` in
+        <foreach item="member" index="index" collection="memberDTOList"
+                 open="(" separator="," close=")">
+            #{member.no}
+        </foreach>
+    </update>
+
+    <!-- 탈퇴 -->
+    <update id="leaveMember">
+        UPDATE gp_member SET
+        `name` = null,
+        pw = '  ',
+        gender = 0,
+        hp = null,
+        email = null,
+        birth = null,
+        role = 4,
+        zip = 0,
+        addr1 = '  ',
+        addr2 = '  ',
+        exp = null,
+        count = 0,
+        levDate = NOW()
+        WHERE `no` in
+        <foreach item="member" index="index" collection="memberDTO"
+                 open="(" separator="," close=")">
+            #{member.no}
+        </foreach>
+    </update>
+</mapper>

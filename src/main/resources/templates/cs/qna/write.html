@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{cs/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<th:block layout:fragment="content">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script th:src="@{/js/cs/qnaWrite.js}"></script>
+    <div class="container">
+
+
+
+
+
+        <!-- Contact Form Begin -->
+        <div class="contact-form spad" id="qnaWriteForm">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="contact__form__title">
+                            <h2>글쓰기</h2>
+                        </div>
+                    </div>
+                </div>
+                <form th:action="@{/cs/qna/write}" method="POST">
+                    <!-- 사용자 정보 uid -->
+                    <input type="hidden" name="uid" th:value="${uid}">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <input type="text" name="title" placeholder="제목">
+                        </div>
+
+                        <select id="qnaCate" name="cate">
+                            <option value="31">회원/자유게시판</option>
+                            <option value="32">입양/분양</option>
+                            <option value="33">제휴/이벤트</option>
+                        </select>
+
+                        <div class="col-lg-3 col-md-3 cate2">
+                            <select id="qnaType" name="type">
+                                <option value="31">회원정보</option>
+                                <option value="32">커뮤니티</option>
+                                <option value="33">공유</option>
+                                <option value="34">입양</option>
+                                <option value="35">분양</option>
+                                <option value="36">후기</option>
+                                <option value="37">제휴문의</option>
+                                <option value="38">후원문의</option>
+                                <option value="39">이벤트문의</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-12 text-center">
+                            <textarea id="qnaWriteContent" name="content" placeholder="내용"></textarea>
+                            <button type="submit" class="site-btn">전송</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Contact Form End -->
+
+        <!-- Contact Section Begin -->
+        <section class="contact spad">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-6 text-center">
+                        <div class="contact__widget">
+                            <span class="icon_phone"></span>
+                            <h4>휴대폰</h4>
+                            <p>010-1234-1001</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6 text-center">
+                        <div class="contact__widget">
+                            <span class="icon_pin_alt"></span>
+                            <h4>주소</h4>
+                            <p>부산광역시 부산진구 중앙대로 688</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6 text-center">
+                        <div class="contact__widget">
+                            <span class="icon_clock_alt"></span>
+                            <h4>상담시간</h4>
+                            <p>10:00 am to 20:00 pm</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6 text-center">
+                        <div class="contact__widget">
+                            <span class="icon_mail_alt"></span>
+                            <h4>이메일</h4>
+                            <p>GaePan@gaepan.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Contact Section End -->
+    </div>>
+</th:block>
+
+</html>
